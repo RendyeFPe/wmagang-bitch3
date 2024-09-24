@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+=======
+ <?php
+    
+//     echo '<div style="text-align: center; padding: 50px; font-size: 24px; background-color: #ffcc00; color: black;">
+//     <strong>Website is Under Maintenance</strong><br> Coming Soon!
+//     </div>';
+//     exit; // Prevent loading the rest of the page
+    
+// ?>
+
+
+
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
 <!DOCTYPE html>
 <html lang="en">
 
@@ -98,6 +112,13 @@
                     <div class="col-lg-12 col-12 z-0" id="slide">
                          <div class="owl-carousel owl-theme" id="project-slide">
                               <div class="item project-wrapper" data-aos="fade-up" data-aos-delay="100">
+<<<<<<< HEAD
+=======
+                                   <img src="images/project/banner 4.png" class="img-fluid" alt="project image">
+                              </div>
+
+                              <div class="item project-wrapper" data-aos="fade-up">
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
                                    <img src="images/project/Banner 1.png" class="img-fluid" alt="project image">
                               </div>
 
@@ -445,6 +466,84 @@
                $stmt = $pdo->query($sql);
                ?>
                <div class="container">
+=======
+try {
+    $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
+    $user = 'root';
+    $password = '';
+    $options = array(
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    );
+    $pdo = new PDO($dsn, $user, $password, $options);
+
+    // Query untuk mendapatkan data terbaru dengan join
+    $sql = "
+        SELECT 
+            db.nama_barang, 
+            db.tanggal, 
+            db.gambar, 
+            FLOOR(AVG(CASE WHEN db.harga_sekarang > 0 THEN db.harga_sekarang END)) AS rata_rata_harga, 
+            FLOOR(AVG(CASE WHEN db.harga_kemarin > 0 THEN db.harga_kemarin END)) AS rata_rata_harga_kemarin, 
+            FLOOR(AVG(db.selisih)) AS selisih_rata
+        FROM (
+            SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal, gambar
+            FROM data_barang_bandar
+            WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                  'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                  'Bawang Merah', 'Bawang Putih Sinco/Honan')
+            
+            UNION ALL
+            
+            SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal, gambar
+            FROM data_barang_pahing
+            WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                  'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                  'Bawang Merah', 'Bawang Putih Sinco/Honan')
+            
+            UNION ALL
+            
+            SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal, gambar
+            FROM data_barang_setonobetek
+            WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                  'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                  'Bawang Merah', 'Bawang Putih Sinco/Honan')
+        ) AS db
+        INNER JOIN (
+            SELECT nama_barang, MAX(tanggal) AS max_tanggal
+            FROM (
+                SELECT nama_barang, tanggal
+                FROM data_barang_bandar
+                WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                      'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                      'Bawang Merah', 'Bawang Putih Sinco/Honan')
+                
+                UNION ALL
+                
+                SELECT nama_barang, tanggal
+                FROM data_barang_pahing
+                WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                      'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                      'Bawang Merah', 'Bawang Putih Sinco/Honan')
+                
+                UNION ALL
+                
+                SELECT nama_barang, tanggal
+                FROM data_barang_setonobetek
+                WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                      'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                      'Bawang Merah', 'Bawang Putih Sinco/Honan')
+            ) AS all_data
+            GROUP BY nama_barang
+        ) AS latest_data
+        ON db.nama_barang = latest_data.nama_barang AND db.tanggal = latest_data.max_tanggal
+        GROUP BY db.nama_barang, db.tanggal, db.gambar
+    ";
+ $stmt = $pdo->query($sql);
+               ?>
+        
+         <div class="container">
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
                     <div class="row row-cols-1 row-cols-lg-4 g-2 g-lg-2 d-flex justify-content-center" data-aos="fade-up">
                          <?php
                          if ($stmt->rowCount() > 0) {
@@ -454,6 +553,8 @@
                                    $rata_rata_harga_kemarin = $row["rata_rata_harga_kemarin"];
                                    $gambar = $row["gambar"];
                                    // $selisih = $rata_rata_harga - $rata_rata_harga;
+
+                                   // $selisih = $rata_rata_harga_kemarin - $rata_rata_harga;
                                    $selisih_rata = $row["selisih_rata"];
                                    if ($rata_rata_harga < $rata_rata_harga_kemarin) {
                                         $keterangan = "images/komoditas/down.png";
@@ -465,6 +566,7 @@
                                         $keterangan = "images/komoditas/sama.png";
                                         $selisih_rata = "<p class='card-title mb-1 text-warning'>Rp.$selisih_rata</p>";
                                    }
+
                                    ;
                                    echo
                                         "<div class='col ms-2'>
@@ -510,7 +612,11 @@
                               </div>
                               <div class="col-md-8">
                                    <div class="card-title">
+<<<<<<< HEAD
                                         <p>naik</p>
+=======
+                                        <p>turun</p>
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
                                    </div>
                               </div>
                          </div>
@@ -522,7 +628,11 @@
                               </div>
                               <div class="col-md-8">
                                    <div class="card-title">
+<<<<<<< HEAD
                                         <p>turun</p>
+=======
+                                        <p>naik</p>
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
                                    </div>
                               </div>
                          </div>
@@ -687,12 +797,21 @@
      </div>
 
      <?php
+
      $server = "localhost";
      $username = "root";
      $password = "";
      $database = "kuesioner";
 
      $conn = new mysqli($server, $username, $password, $database);
+
+     $servername = "localhost";
+     $username = "root";
+     $password = '';
+     $dbname = "kuesioner";
+
+     $conn = new mysqli($servername, $username, $password, $dbname);
+
 
      if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
@@ -732,12 +851,21 @@
                               </div>
                               <?php
                               // koneksi database
+
                               $servername = "localhost";
                               $username = "root";
                               $password = "";
                               $dbname = "kuesioner";
 
                               $conn = new mysqli($servername, $username, $password, $dbname);
+
+                              $server = 'localhost';
+                              $user = 'root';
+                              $password = '';
+                              $dbname = 'kuesioner';
+
+                              $conn = new mysqli($server, $user, $password, $dbname);
+
 
                               if ($conn->connect_error) {
                                    die("Connection failed:" . $conn->connect_error);
@@ -814,9 +942,15 @@
 
      <!-- <div id='myChart'>
           <a class="zc-ref" href="">Charts by ZingChart</a>
+
      </div> -->
 
      <!-- $conn = mysqli_connect("localhost", "root", "", "massage");
+=======
+     </div> >
+
+     <! $conn = mysqli_connect("localhost", "root", "", "massage");
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
      if (mysqli_connect_errno()) {
      echo "Koneksi database gagal: " . mysqli_connect_error();
      exit();

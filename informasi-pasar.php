@@ -40,12 +40,20 @@
                <?php
                try {
                     $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
+<<<<<<< HEAD
                     $username = 'root';
+=======
+                    $user = 'root';
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
                     $password = '';
                     $options = array(
                          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                     );
+<<<<<<< HEAD
                     $pdo = new PDO($dsn, $username, $password, $options);
+=======
+                    $pdo = new PDO($dsn, $user, $password, $options);
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
                } catch (PDOException $e) {
                     die("Koneksi gagal: " . $e->getMessage());
                }
@@ -61,6 +69,7 @@
                          <!-- <div class="table-responsive-lg"> -->
                          <table class="table table-responsive">
                               <?php
+<<<<<<< HEAD
                               $query_checkbox = "SELECT nama_barang, FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, tanggal, 
                                 FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, FLOOR(AVG(selisih)) AS selisih_rata_rata, gambar
                                 FROM (
@@ -77,6 +86,32 @@
                                     FROM data_barang_setonobetek
                                 ) AS ranked
                                 WHERE rn = 1 GROUP BY nama_barang";
+=======
+                              $query_checkbox = "SELECT nama_barang, 
+       FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, 
+       FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, 
+       FLOOR(AVG(selisih)) AS selisih_rata_rata, 
+       gambar
+FROM (
+    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
+    FROM data_barang_bandar d
+    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_bandar WHERE nama_barang = d.nama_barang)
+    
+    UNION ALL
+
+    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
+    FROM data_barang_pahing d
+    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_pahing WHERE nama_barang = d.nama_barang)
+    
+    UNION ALL
+
+    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
+    FROM data_barang_setonobetek d
+    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_setonobetek WHERE nama_barang = d.nama_barang)
+) AS ranked
+GROUP BY nama_barang, gambar
+";
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
 
                               $stmt = $pdo->query($query_checkbox);
                               if ($stmt->rowCount() > 0) {
@@ -153,7 +188,11 @@
                                    </div>
                                    <div class="col-md-8">
                                         <div class="card-title">
+<<<<<<< HEAD
                                              <p>naik</p>
+=======
+                                             <p>turun</p>
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
                                         </div>
                                    </div>
                               </div>
@@ -165,7 +204,11 @@
                                    </div>
                                    <div class="col-md-8">
                                         <div class="card-title">
+<<<<<<< HEAD
                                              <p>turun</p>
+=======
+                                             <p>naik</p>
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
                                         </div>
                                    </div>
                               </div>
@@ -200,6 +243,7 @@
 
                          $pdo = new PDO($dsn, $username, $password, $options);
 
+<<<<<<< HEAD
                          $qry = "SELECT nama_barang, FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, tanggal, FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, FLOOR(AVG(selisih)) AS selisih_rata_rata, gambar
             FROM (
                 SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal,
@@ -219,6 +263,51 @@
             ) AS ranked
             WHERE rn = 1
             GROUP BY nama_barang;";
+=======
+                         $qry = "SELECT nama_barang, 
+               CASE WHEN FLOOR(AVG(harga_sekarang)) = 0 THEN NULL ELSE FLOOR(AVG(harga_sekarang)) END AS rata_rata_harga, 
+               tanggal, 
+               FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, 
+               FLOOR(AVG(selisih)) AS selisih_rata_rata, 
+               gambar
+        FROM (
+            SELECT dbb.nama_barang, dbb.harga_sekarang, dbb.harga_kemarin, dbb.selisih, dbb.tanggal, dbb.gambar, dbb.status_validasi
+            FROM data_barang_bandar dbb
+            JOIN (
+                SELECT nama_barang, MAX(tanggal) AS max_tanggal
+                FROM data_barang_bandar 
+                WHERE status_validasi = 'true'
+                GROUP BY nama_barang
+            ) latest
+            ON dbb.nama_barang = latest.nama_barang AND dbb.tanggal = latest.max_tanggal
+            
+            UNION ALL
+            
+            SELECT dbp.nama_barang, dbp.harga_sekarang, dbp.harga_kemarin, dbp.selisih, dbp.tanggal, dbp.gambar, dbp.status_validasi
+            FROM data_barang_pahing dbp
+            JOIN (
+                SELECT nama_barang, MAX(tanggal) AS max_tanggal
+                FROM data_barang_pahing 
+                WHERE status_validasi = 'true'
+                GROUP BY nama_barang
+            ) latest
+            ON dbp.nama_barang = latest.nama_barang AND dbp.tanggal = latest.max_tanggal
+            
+            UNION ALL
+            
+            SELECT dbs.nama_barang, dbs.harga_sekarang, dbs.harga_kemarin, dbs.selisih, dbs.tanggal, dbs.gambar, dbs.status_validasi
+            FROM data_barang_setonobetek dbs
+            JOIN (
+                SELECT nama_barang, MAX(tanggal) AS max_tanggal
+                FROM data_barang_setonobetek 
+                WHERE status_validasi = 'true'
+                GROUP BY nama_barang
+            ) latest
+            ON dbs.nama_barang = latest.nama_barang AND dbs.tanggal = latest.max_tanggal
+        ) AS ranked
+        GROUP BY nama_barang, tanggal, gambar;";
+
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
 
                          $stmt = $pdo->query($qry);
 
@@ -279,7 +368,11 @@
 
           <!-- fiilter untuk rentang tanggal -->
           <div class="contaier">
+<<<<<<< HEAD
                <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">DataTabel Harga Barang seluruh area
+=======
+               <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">Data Tabel Harga Barang seluruh area
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
                </h2>
                <div class="gx-5 d-flex justify-content-center my-5" data-aos="fade-up">
                     <div class="border border-dark rounded px-4 py-4  my-5">

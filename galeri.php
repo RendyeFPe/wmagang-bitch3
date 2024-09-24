@@ -15,7 +15,10 @@
      <link rel="stylesheet" href="css/owl.carousel.min.css">
      <link rel="stylesheet" href="css/owl.theme.default.min.css">
      <link rel="shorcut icon" href="images/lpicon2.png">
+<<<<<<< HEAD
      
+=======
+>>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
      <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
      <!-- MAIN CSS -->
