@@ -3,7 +3,7 @@
 
 <head>
 
-     <title>DISPERDAGIN | Dinas Perdagangan Dan Industri kontol</title>
+     <title>DISPERDAGIN | Dinas Perdagangan Dan Industri</title>
 
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -15,6 +15,7 @@
      <link rel="stylesheet" href="css/owl.carousel.min.css">
      <link rel="stylesheet" href="css/owl.theme.default.min.css">
      <link rel="shorcut icon" href="images/lpicon2.png">
+     
      <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
      <!-- MAIN CSS -->
