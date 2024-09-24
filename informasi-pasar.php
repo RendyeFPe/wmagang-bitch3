@@ -41,19 +41,27 @@
                try {
                     $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
 <<<<<<< HEAD
+<<<<<<< HEAD
                     $username = 'root';
 =======
                     $user = 'root';
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+                    $user = 'root';
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                     $password = '';
                     $options = array(
                          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                     );
 <<<<<<< HEAD
+<<<<<<< HEAD
                     $pdo = new PDO($dsn, $username, $password, $options);
 =======
                     $pdo = new PDO($dsn, $user, $password, $options);
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+                    $pdo = new PDO($dsn, $user, $password, $options);
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                } catch (PDOException $e) {
                     die("Koneksi gagal: " . $e->getMessage());
                }
@@ -69,6 +77,7 @@
                          <!-- <div class="table-responsive-lg"> -->
                          <table class="table table-responsive">
                               <?php
+<<<<<<< HEAD
 <<<<<<< HEAD
                               $query_checkbox = "SELECT nama_barang, FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, tanggal, 
                                 FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, FLOOR(AVG(selisih)) AS selisih_rata_rata, gambar
@@ -87,6 +96,8 @@
                                 ) AS ranked
                                 WHERE rn = 1 GROUP BY nama_barang";
 =======
+=======
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                               $query_checkbox = "SELECT nama_barang, 
        FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, 
        FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, 
@@ -111,7 +122,10 @@ FROM (
 ) AS ranked
 GROUP BY nama_barang, gambar
 ";
+<<<<<<< HEAD
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
 
                               $stmt = $pdo->query($query_checkbox);
                               if ($stmt->rowCount() > 0) {
@@ -189,10 +203,14 @@ GROUP BY nama_barang, gambar
                                    <div class="col-md-8">
                                         <div class="card-title">
 <<<<<<< HEAD
+<<<<<<< HEAD
                                              <p>naik</p>
 =======
                                              <p>turun</p>
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+                                             <p>turun</p>
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                                         </div>
                                    </div>
                               </div>
@@ -205,10 +223,14 @@ GROUP BY nama_barang, gambar
                                    <div class="col-md-8">
                                         <div class="card-title">
 <<<<<<< HEAD
+<<<<<<< HEAD
                                              <p>turun</p>
 =======
                                              <p>naik</p>
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+                                             <p>naik</p>
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                                         </div>
                                    </div>
                               </div>
@@ -244,6 +266,7 @@ GROUP BY nama_barang, gambar
                          $pdo = new PDO($dsn, $username, $password, $options);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                          $qry = "SELECT nama_barang, FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, tanggal, FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, FLOOR(AVG(selisih)) AS selisih_rata_rata, gambar
             FROM (
                 SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal,
@@ -264,6 +287,8 @@ GROUP BY nama_barang, gambar
             WHERE rn = 1
             GROUP BY nama_barang;";
 =======
+=======
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                          $qry = "SELECT nama_barang, 
                CASE WHEN FLOOR(AVG(harga_sekarang)) = 0 THEN NULL ELSE FLOOR(AVG(harga_sekarang)) END AS rata_rata_harga, 
                tanggal, 
@@ -307,7 +332,10 @@ GROUP BY nama_barang, gambar
         ) AS ranked
         GROUP BY nama_barang, tanggal, gambar;";
 
+<<<<<<< HEAD
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
 
                          $stmt = $pdo->query($qry);
 
@@ -369,10 +397,14 @@ GROUP BY nama_barang, gambar
           <!-- fiilter untuk rentang tanggal -->
           <div class="contaier">
 <<<<<<< HEAD
+<<<<<<< HEAD
                <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">DataTabel Harga Barang seluruh area
 =======
                <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">Data Tabel Harga Barang seluruh area
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+               <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">Data Tabel Harga Barang seluruh area
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                </h2>
                <div class="gx-5 d-flex justify-content-center my-5" data-aos="fade-up">
                     <div class="border border-dark rounded px-4 py-4  my-5">

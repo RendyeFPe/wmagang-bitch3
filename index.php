@@ -1,5 +1,8 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
  <?php
     
 //     echo '<div style="text-align: center; padding: 50px; font-size: 24px; background-color: #ffcc00; color: black;">
@@ -11,13 +14,16 @@
 
 
 
+<<<<<<< HEAD
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-     <title>DISPERDAGIN | Dinas Perdagangan Dan Industri</title>
+     <title>DISPERDAGIN | Dinas Perdagangan Dan Industriiii</title>
 
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -113,12 +119,18 @@
                          <div class="owl-carousel owl-theme" id="project-slide">
                               <div class="item project-wrapper" data-aos="fade-up" data-aos-delay="100">
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                                    <img src="images/project/banner 4.png" class="img-fluid" alt="project image">
                               </div>
 
                               <div class="item project-wrapper" data-aos="fade-up">
+<<<<<<< HEAD
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                                    <img src="images/project/Banner 1.png" class="img-fluid" alt="project image">
                               </div>
 
@@ -427,44 +439,81 @@
           <p class="text-silent text-center" data-aos="fade-up">*data diambil dari seluruh pasar</p>
           <p class="fw-bold text-dark" data-aos="fade-up"></p>
           <?php
-          try {
-               $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
-               $username = 'root';
-               $password = '';
-               $options = array(
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-               );
-               $pdo = new PDO($dsn, $username, $password, $options);
-               $sql = "SELECT FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, tanggal, gambar, nama_barang, FLOOR(AVG(selisih)) AS selisih_rata
-  FROM (
-  SELECT nama_barang, harga_sekarang,harga_kemarin,selisih, tanggal, gambar,
-  ROW_NUMBER() OVER (PARTITION BY nama_barang ORDER BY tanggal DESC) AS rn
-  FROM data_barang_bandar
-  WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
-  'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 'Bawang Merah', 'Bawang
-  Putih Sinco/Honan')
-  UNION ALL
-  SELECT nama_barang, harga_sekarang,harga_kemarin,selisih, tanggal, gambar,
-  ROW_NUMBER() OVER (PARTITION BY nama_barang ORDER BY tanggal DESC) AS rn
-  FROM data_barang_pahing
-  WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
-  'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 'Bawang Merah', 'Bawang
-  Putih Sinco/Honan')
-  UNION ALL
-  SELECT nama_barang, harga_sekarang,harga_kemarin,selisih, tanggal, gambar,
-  ROW_NUMBER() OVER (PARTITION BY nama_barang ORDER BY tanggal DESC) AS rn
-  FROM data_barang_setonobetek
-  WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
-  'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 'Bawang Merah', 'Bawang
-  Putih Sinco/Honan')
+try {
+    $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
+    $user = 'root';
+    $password = '';
+    $options = array(
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    );
+    $pdo = new PDO($dsn, $user, $password, $options);
 
-  ) AS ranked
-  WHERE rn = 1 AND nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah
-  Besar','Daging Sapi Paha Belakang','Daging Ayam Kampung','Telur Ayam Ras','Cabe Rawit Merah','Bawang Merah','Bawang
-  Putih Sinco/Honan') GROUP BY nama_barang";
-               $stmt = $pdo->query($sql);
+    // Query untuk mendapatkan data terbaru dengan join
+    $sql = "
+        SELECT 
+            db.nama_barang, 
+            db.tanggal, 
+            db.gambar, 
+            FLOOR(AVG(CASE WHEN db.harga_sekarang > 0 THEN db.harga_sekarang END)) AS rata_rata_harga, 
+            FLOOR(AVG(CASE WHEN db.harga_kemarin > 0 THEN db.harga_kemarin END)) AS rata_rata_harga_kemarin, 
+            FLOOR(AVG(db.selisih)) AS selisih_rata
+        FROM (
+            SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal, gambar
+            FROM data_barang_bandar
+            WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                  'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                  'Bawang Merah', 'Bawang Putih Sinco/Honan')
+            
+            UNION ALL
+            
+            SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal, gambar
+            FROM data_barang_pahing
+            WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                  'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                  'Bawang Merah', 'Bawang Putih Sinco/Honan')
+            
+            UNION ALL
+            
+            SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal, gambar
+            FROM data_barang_setonobetek
+            WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                  'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                  'Bawang Merah', 'Bawang Putih Sinco/Honan')
+        ) AS db
+        INNER JOIN (
+            SELECT nama_barang, MAX(tanggal) AS max_tanggal
+            FROM (
+                SELECT nama_barang, tanggal
+                FROM data_barang_bandar
+                WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                      'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                      'Bawang Merah', 'Bawang Putih Sinco/Honan')
+                
+                UNION ALL
+                
+                SELECT nama_barang, tanggal
+                FROM data_barang_pahing
+                WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                      'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                      'Bawang Merah', 'Bawang Putih Sinco/Honan')
+                
+                UNION ALL
+                
+                SELECT nama_barang, tanggal
+                FROM data_barang_setonobetek
+                WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                                      'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                                      'Bawang Merah', 'Bawang Putih Sinco/Honan')
+            ) AS all_data
+            GROUP BY nama_barang
+        ) AS latest_data
+        ON db.nama_barang = latest_data.nama_barang AND db.tanggal = latest_data.max_tanggal
+        GROUP BY db.nama_barang, db.tanggal, db.gambar
+    ";
+ $stmt = $pdo->query($sql);
                ?>
+<<<<<<< HEAD
                <div class="container">
 =======
 try {
@@ -544,6 +593,10 @@ try {
         
          <div class="container">
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+        
+         <div class="container">
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                     <div class="row row-cols-1 row-cols-lg-4 g-2 g-lg-2 d-flex justify-content-center" data-aos="fade-up">
                          <?php
                          if ($stmt->rowCount() > 0) {
@@ -552,8 +605,11 @@ try {
                                    $rata_rata_harga = $row["rata_rata_harga"];
                                    $rata_rata_harga_kemarin = $row["rata_rata_harga_kemarin"];
                                    $gambar = $row["gambar"];
+<<<<<<< HEAD
                                    // $selisih = $rata_rata_harga - $rata_rata_harga;
 
+=======
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                                    // $selisih = $rata_rata_harga_kemarin - $rata_rata_harga;
                                    $selisih_rata = $row["selisih_rata"];
                                    if ($rata_rata_harga < $rata_rata_harga_kemarin) {
@@ -566,9 +622,15 @@ try {
                                         $keterangan = "images/komoditas/sama.png";
                                         $selisih_rata = "<p class='card-title mb-1 text-warning'>Rp.$selisih_rata</p>";
                                    }
+<<<<<<< HEAD
 
                                    ;
                                    echo
+=======
+                                   
+                                ;
+                                echo
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                                         "<div class='col ms-2'>
                 <div class='card border-0 bg-transparent'>
                     <div class='card-img rounded-3'>
@@ -613,10 +675,14 @@ try {
                               <div class="col-md-8">
                                    <div class="card-title">
 <<<<<<< HEAD
+<<<<<<< HEAD
                                         <p>naik</p>
 =======
                                         <p>turun</p>
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+                                        <p>turun</p>
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                                    </div>
                               </div>
                          </div>
@@ -629,10 +695,14 @@ try {
                               <div class="col-md-8">
                                    <div class="card-title">
 <<<<<<< HEAD
+<<<<<<< HEAD
                                         <p>turun</p>
 =======
                                         <p>naik</p>
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+                                        <p>naik</p>
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                                    </div>
                               </div>
                          </div>
@@ -797,13 +867,17 @@ try {
      </div>
 
      <?php
+<<<<<<< HEAD
 
      $server = "localhost";
+=======
+     $servername = "localhost";
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
      $username = "root";
-     $password = "";
-     $database = "kuesioner";
+     $password = '';
+     $dbname = "kuesioner";
 
-     $conn = new mysqli($server, $username, $password, $database);
+     $conn = new mysqli($servername, $username, $password, $dbname);
 
      $servername = "localhost";
      $username = "root";
@@ -851,13 +925,20 @@ try {
                               </div>
                               <?php
                               // koneksi database
+<<<<<<< HEAD
 
                               $servername = "localhost";
                               $username = "root";
                               $password = "";
                               $dbname = "kuesioner";
+=======
+                              $server = 'localhost';
+                              $user = 'root';
+                              $password = '';
+                              $dbname = 'kuesioner';
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
 
-                              $conn = new mysqli($servername, $username, $password, $dbname);
+                              $conn = new mysqli($server, $user, $password, $dbname);
 
                               $server = 'localhost';
                               $user = 'root';
@@ -942,6 +1023,7 @@ try {
 
      <!-- <div id='myChart'>
           <a class="zc-ref" href="">Charts by ZingChart</a>
+<<<<<<< HEAD
 
      </div> -->
 
@@ -951,6 +1033,11 @@ try {
 
      <! $conn = mysqli_connect("localhost", "root", "", "massage");
 >>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
+=======
+     </div> >
+
+     <! $conn = mysqli_connect("localhost", "root", "", "massage");
+>>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
      if (mysqli_connect_errno()) {
      echo "Koneksi database gagal: " . mysqli_connect_error();
      exit();
