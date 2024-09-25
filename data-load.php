@@ -6,7 +6,7 @@
     $koneksi = mysqli_connect('localhost', 'root', '', 'data_harga_pokok');
 
     // Periksa koneksi
-    if (mysqli_connect_errno()) {
+    if (mysqli_connect_error()) {
         echo "Koneksi database gagal: " . mysqli_connect_error();
         exit();
     }
@@ -16,46 +16,67 @@
 
     // Lakukan kueri data berdasarkan tanggal, hanya menghitung nilai yang tidak NULL
     $qry = "SELECT 
-    d.nama_barang, 
-    FLOOR(AVG(d.harga_sekarang)) AS rata_rata_harga, 
-    MAX(d.tanggal) AS tanggal,
-    FLOOR(AVG(d.harga_kemarin)) AS rata_rata_harga_kemarin, 
-    FLOOR(AVG(d.harga_sekarang) - AVG(d.harga_kemarin)) AS selisih_rata_rata, 
-    MAX(d.gambar) AS gambar
+    db.nama_barang, 
+    db.tanggal, 
+    db.gambar, 
+    FLOOR(AVG(CASE WHEN db.harga_sekarang > 0 THEN db.harga_sekarang ELSE NULL END)) AS rata_rata_harga, 
+    FLOOR(AVG(CASE WHEN db.harga_kemarin > 0 THEN db.harga_kemarin ELSE NULL END)) AS rata_rata_harga_kemarin, 
+    FLOOR(AVG(CASE 
+        WHEN db.harga_sekarang > 0 AND db.harga_kemarin > 0 THEN db.harga_sekarang - db.harga_kemarin 
+        ELSE NULL 
+    END)) AS selisih_rata
 FROM (
-    SELECT nama_barang, 
-           CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END AS harga_sekarang,
-           CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END AS harga_kemarin,
-           tanggal, 
-           gambar
+    SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal, gambar
     FROM data_barang_bandar
+    WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                          'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                          'Bawang Merah', 'Bawang Putih Sinco/Honan')
+    
     UNION ALL
-    SELECT nama_barang, 
-           CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END AS harga_sekarang,
-           CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END AS harga_kemarin,
-           tanggal, 
-           gambar
+    
+    SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal, gambar
     FROM data_barang_pahing
+    WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                          'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                          'Bawang Merah', 'Bawang Putih Sinco/Honan')
+    
     UNION ALL
-    SELECT nama_barang, 
-           CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END AS harga_sekarang,
-           CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END AS harga_kemarin,
-           tanggal, 
-           gambar
+    
+    SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal, gambar
     FROM data_barang_setonobetek
-) AS d
-JOIN (
+    WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                          'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                          'Bawang Merah', 'Bawang Putih Sinco/Honan')
+) AS db
+INNER JOIN (
     SELECT nama_barang, MAX(tanggal) AS max_tanggal
     FROM (
-        SELECT nama_barang, tanggal FROM data_barang_bandar
+        SELECT nama_barang, tanggal
+        FROM data_barang_bandar
+        WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                              'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                              'Bawang Merah', 'Bawang Putih Sinco/Honan')
+        
         UNION ALL
-        SELECT nama_barang, tanggal FROM data_barang_pahing
+        
+        SELECT nama_barang, tanggal
+        FROM data_barang_pahing
+        WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                              'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                              'Bawang Merah', 'Bawang Putih Sinco/Honan')
+        
         UNION ALL
-        SELECT nama_barang, tanggal FROM data_barang_setonobetek
-    ) AS sub
+        
+        SELECT nama_barang, tanggal
+        FROM data_barang_setonobetek
+        WHERE nama_barang IN ('Beras premium', 'Beras Medium', 'Telur Ayam ras', 'Cabe Merah Keriting', 'Cabe Merah Besar',
+                              'Daging Sapi Paha Belakang', 'Daging Ayam Kampung', 'Telur Ayam Ras', 'Cabe Rawit Merah', 
+                              'Bawang Merah', 'Bawang Putih Sinco/Honan')
+    ) AS all_data
     GROUP BY nama_barang
-) AS latest ON d.nama_barang = latest.nama_barang AND d.tanggal = latest.max_tanggal
-GROUP BY d.nama_barang
+) AS latest_data
+ON db.nama_barang = latest_data.nama_barang AND db.tanggal = latest_data.max_tanggal
+GROUP BY db.nama_barang, db.tanggal, db.gambar
 ";
 
     $result = mysqli_query($koneksi, $qry);
