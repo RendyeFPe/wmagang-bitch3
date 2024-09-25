@@ -1,3 +1,14 @@
+ <?php
+    
+//     echo '<div style="text-align: center; padding: 50px; font-size: 24px; background-color: #ffcc00; color: black;">
+//     <strong>Website is Under Maintenance</strong><br> Coming Soon!
+//     </div>';
+//     exit; // Prevent loading the rest of the page
+    
+// ?>
+
+
+
 <?php
     
 //     echo '<div style="text-align: center; padding: 50px; font-size: 24px; background-color: #ffcc00; color: black;">
@@ -14,7 +25,7 @@
 
 <head>
 
-     <title>DISPERDAGIN | Dinas Perdagangan Dan Industri</title>
+     <title>DISPERDAGIN | Dinas Perdagangan Dan Industriiii</title>
 
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=Edge">

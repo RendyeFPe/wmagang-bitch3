@@ -38,55 +38,58 @@
                     <p class="text-dark">pilih untuk melihat harga pasar dalam rentang 1 minggu</p>
                </center>
                <?php
-try {
-    $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
-    $username = 'root';
-    $password = '';
-    $options = array(
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    );
-    $pdo = new PDO($dsn, $username, $password, $options);
-} catch (PDOException $e) {
-    die("Koneksi gagal: " . $e->getMessage());
-}
-?>
-<div class="container p-2 border border-dark rounded my-5 overflow-x-scroll" data-aos="fade-up" data-aos-delay="100">
-    <?php
-    echo "<tr>
+               try {
+                    $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
+                    $user = 'root';
+                    $password = '';
+                    $options = array(
+                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+                    );
+                    $pdo = new PDO($dsn, $user, $password, $options);
+               } catch (PDOException $e) {
+                    die("Koneksi gagal: " . $e->getMessage());
+               }
+               ?>
+               <div class="container p-2 border border-dark rounded my-5 overflow-x-scroll" data-aos="fade-up"
+                    data-aos-delay="100">
+                    <?php
+                    echo "<tr>
     <td colspan='2' class='selected-item'>Jumlah item yang dipilih: <span id='selected-count'>0</span></td>
     </tr>";
-    ?>
-    <form method="post" action="datafiltered.php">
-        <table class="table table-responsive">
-            <?php
-            $query_checkbox = "SELECT nama_barang, 
-                FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, 
-                FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, 
-                FLOOR(AVG(selisih)) AS selisih_rata_rata, 
-                gambar
-                FROM (
-                    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
-                    FROM data_barang_bandar d
-                    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_bandar WHERE nama_barang = d.nama_barang)
+                    ?>
+                    <form method="post" action="datafiltered.php">
+                         <!-- <div class="table-responsive-lg"> -->
+                         <table class="table table-responsive">
+                              <?php
+                              $query_checkbox = "SELECT nama_barang, 
+       FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, 
+       FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, 
+       FLOOR(AVG(selisih)) AS selisih_rata_rata, 
+       gambar
+FROM (
+    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
+    FROM data_barang_bandar d
+    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_bandar WHERE nama_barang = d.nama_barang)
+    
+    UNION ALL
 
-                    UNION ALL
+    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
+    FROM data_barang_pahing d
+    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_pahing WHERE nama_barang = d.nama_barang)
+    
+    UNION ALL
 
-                    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
-                    FROM data_barang_pahing d
-                    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_pahing WHERE nama_barang = d.nama_barang)
+    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
+    FROM data_barang_setonobetek d
+    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_setonobetek WHERE nama_barang = d.nama_barang)
+) AS ranked
+GROUP BY nama_barang, gambar
+";
 
-                    UNION ALL
-
-                    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
-                    FROM data_barang_setonobetek d
-                    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_setonobetek WHERE nama_barang = d.nama_barang)
-                ) AS ranked
-                GROUP BY nama_barang, gambar";
-            
-            $stmt = $pdo->query($query_checkbox);
-            if ($stmt->rowCount() > 0) {
-                echo "
-                <tr>
+                              $stmt = $pdo->query($query_checkbox);
+                              if ($stmt->rowCount() > 0) {
+                                   echo "
+                    <tr>
                     <label>
                         <input type='checkbox' id='select-all'> Select All
                     </label>

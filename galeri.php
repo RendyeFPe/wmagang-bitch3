@@ -3,7 +3,7 @@
 
 <head>
 
-     <title>DISPERDAGIN | Dinas Perdagangan Dan Industri kontol</title>
+     <title>DISPERDAGIN | Dinas Perdagangan Dan Industri</title>
 
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=Edge">
