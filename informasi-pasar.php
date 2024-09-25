@@ -38,108 +38,104 @@
                     <p class="text-dark">pilih untuk melihat harga pasar dalam rentang 1 minggu</p>
                </center>
                <?php
-               try {
-                    $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
-                    $user = 'root';
-                    $password = '';
-                    $options = array(
-                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-                    );
-                    $pdo = new PDO($dsn, $user, $password, $options);
-               } catch (PDOException $e) {
-                    die("Koneksi gagal: " . $e->getMessage());
-               }
-               ?>
-               <div class="container p-2 border border-dark rounded my-5 overflow-x-scroll" data-aos="fade-up"
-                    data-aos-delay="100">
-                    <?php
-                    echo "<tr>
+try {
+    $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
+    $username = 'root';
+    $password = '';
+    $options = array(
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    );
+    $pdo = new PDO($dsn, $username, $password, $options);
+} catch (PDOException $e) {
+    die("Koneksi gagal: " . $e->getMessage());
+}
+?>
+<div class="container p-2 border border-dark rounded my-5 overflow-x-scroll" data-aos="fade-up" data-aos-delay="100">
+    <?php
+    echo "<tr>
     <td colspan='2' class='selected-item'>Jumlah item yang dipilih: <span id='selected-count'>0</span></td>
     </tr>";
-                    ?>
-                    <form method="post" action="datafiltered.php">
-                         <!-- <div class="table-responsive-lg"> -->
-                         <table class="table table-responsive">
-                              <?php
-                              $query_checkbox = "SELECT nama_barang, 
-                              FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, 
-                              FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, 
-                              FLOOR(AVG(selisih)) AS selisih_rata_rata, 
-                              gambar
-                       FROM (
-                           SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
-                           FROM data_barang_bandar d
-                           WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_bandar WHERE nama_barang = d.nama_barang)
-                           
-                           UNION ALL
-                       
-                           SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
-                           FROM data_barang_pahing d
-                           WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_pahing WHERE nama_barang = d.nama_barang)
-                           
-                           UNION ALL
-                       
-                           SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
-                           FROM data_barang_setonobetek d
-                           WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_setonobetek WHERE nama_barang = d.nama_barang)
-                       ) AS ranked
-                       GROUP BY nama_barang, gambar
-                       ";
-                       
-                                                     $stmt = $pdo->query($query_checkbox);
-                                                     if ($stmt->rowCount() > 0) {
-                                                          echo "
-                                           <tr>
-                                           <label>
-                                           <input type='checkbox' id='select-all'> Select All
-                                           </label>
-                                           </tr>";
-                                                          while ($row_checkbox = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                                               $field_data = htmlspecialchars($row_checkbox['nama_barang'], ENT_QUOTES, 'UTF-8');
-                                                               echo "
-                                           <tr>
-                                           <label>
-                                           <input type='checkbox' name='filter[]' value='$field_data'> 
-                                           $field_data</label>
-                                           </tr>";
-                                                          }
-                                                     } else {
-                                                          echo "Tidak ada data untuk ditampilkan.";
-                                                     }
-                                                     ?>
-                              <br>
-                              <script>
-                                   // fungsi select all
-                                   document.getElementById('select-all').addEventListener('change', function () {
-                                        var checkboxes = document.querySelectorAll("input[name='filter[]']");
-                                        checkboxes.forEach(function (checkbox) {
-                                             checkbox.checked = document.getElementById('select-all').checked;
-                                        });
-                                        updateSelectedCount();
-                                   });
+    ?>
+    <form method="post" action="datafiltered.php">
+        <table class="table table-responsive">
+            <?php
+            $query_checkbox = "SELECT nama_barang, 
+                FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, 
+                FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, 
+                FLOOR(AVG(selisih)) AS selisih_rata_rata, 
+                gambar
+                FROM (
+                    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
+                    FROM data_barang_bandar d
+                    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_bandar WHERE nama_barang = d.nama_barang)
 
-                                   // fungsi check box
-                                   var checkboxes = document.querySelectorAll("input[name='filter[]']");
-                                   checkboxes.forEach(function (checkbox) {
-                                        checkbox.addEventListener('change', function () {
-                                             updateSelectedCount();
-                                        });
-                                   });
+                    UNION ALL
 
-                                   // fungsi count select
-                                   function updateSelectedCount() {
-                                        var selectedCheckboxes = document.querySelectorAll("input[name='filter[]']:checked");
-                                        document.getElementById('selected-count').innerText = selectedCheckboxes.length;
-                                   }
-                              </script>
+                    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
+                    FROM data_barang_pahing d
+                    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_pahing WHERE nama_barang = d.nama_barang)
 
-                         </table>
-                         <!-- </div> -->
-                         <button type="submit" value="Filter" class="button blob btn-primary btn">
-                              <span>Filter</span>
-                         </button>
-                    </form>
-               </div>
+                    UNION ALL
+
+                    SELECT d.nama_barang, d.harga_sekarang, d.harga_kemarin, d.selisih, d.tanggal, d.gambar
+                    FROM data_barang_setonobetek d
+                    WHERE d.tanggal = (SELECT MAX(tanggal) FROM data_barang_setonobetek WHERE nama_barang = d.nama_barang)
+                ) AS ranked
+                GROUP BY nama_barang, gambar";
+            
+            $stmt = $pdo->query($query_checkbox);
+            if ($stmt->rowCount() > 0) {
+                echo "
+                <tr>
+                    <label>
+                        <input type='checkbox' id='select-all'> Select All
+                    </label>
+                </tr>";
+                while ($row_checkbox = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $field_data = htmlspecialchars($row_checkbox['nama_barang'], ENT_QUOTES, 'UTF-8');
+                    echo "
+                    <tr>
+                        <label>
+                            <input type='checkbox' name='filter[]' value='$field_data'> 
+                            $field_data
+                        </label>
+                    </tr>";
+                }
+            } else {
+                echo "Tidak ada data untuk ditampilkan.";
+            }
+            ?>
+            <br>
+            <script>
+                document.getElementById('select-all').addEventListener('change', function () {
+                    var checkboxes = document.querySelectorAll("input[name='filter[]']");
+                    checkboxes.forEach(function (checkbox) {
+                        checkbox.checked = document.getElementById('select-all').checked;
+                    });
+                    updateSelectedCount();
+                });
+
+                var checkboxes = document.querySelectorAll("input[name='filter[]']");
+                checkboxes.forEach(function (checkbox) {
+                    checkbox.addEventListener('change', function () {
+                        updateSelectedCount();
+                    });
+                });
+
+                function updateSelectedCount() {
+                    var selectedCheckboxes = document.querySelectorAll("input[name='filter[]']:checked");
+                    document.getElementById('selected-count').innerText = selectedCheckboxes.length;
+                }
+            </script>
+        </table>
+        <button type="submit" value="Filter" class="button blob btn-primary btn">
+            <span>Filter</span>
+        </button>
+    </form>
+</div>
+
+<!-- Bagian lain dari script sama, tidak ada konflik kode lagi -->
+
           </div>
           </div>
           <div class="bg-white mt-3">
@@ -259,8 +255,6 @@ FROM (
 ) AS ranked
 GROUP BY nama_barang, tanggal, gambar
 ";
-
-
                          $stmt = $pdo->query($qry);
 
                          if ($stmt->rowCount() > 0) {

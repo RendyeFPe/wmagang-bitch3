@@ -84,28 +84,33 @@ GROUP BY db.nama_barang, db.tanggal, db.gambar
 
     // Tampilkan hasil dalam bentuk HTML
     if (mysqli_num_rows($result) > 0) {
-        echo "<div class='container overflow-x-scroll'>
-        <table border='1' class='table table-striped'>
+        echo "<div 'container overflow-x-scroll'>
+        <table border='1' class='table table-striped '>
             <thead>
             <tr>
                 <th>No</th>
                 <th>Nama Barang</th>
                 <th>Tanggal</th>
                 <th>Harga Baru (Rp)</th>
-                <th>Harga Lama (Rp)</th>
-                <th>Selisih Rata-rata</th>
+                <th>Harga Lama</th>
             </tr>
-            </thead>";
-        
+            </thead>"
+        ;
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<tbody>";
             echo "<tr>";
             echo "<td>" . $no++ . "</td>";
             echo "<td>" . $row['nama_barang'] . "</td>";
             echo "<td>" . $row['tanggal'] . "</td>";
-            echo "<td>" . ($row['rata_rata_harga'] !== null ? $row['rata_rata_harga'] : 'Data tidak tersedia') . "</td>";
-            echo "<td>" . ($row['rata_rata_harga_kemarin'] !== null ? $row['rata_rata_harga_kemarin'] : 'Data tidak tersedia') . "</td>";
-            echo "<td>" . ($row['selisih_rata_rata'] !== null ? $row['selisih_rata_rata'] : 'Data tidak tersedia') . "</td>";
+            echo "<td>" . $row['rata_rata_harga'] . "</td>";
+            echo "<td>" . $row['rata_rata_harga_kemarin'] . "</td>";
+            // if ($row['rata_rata_harga'] > $row['rata_rata_harga_kemarin']) {
+            //     echo "<td><img src='images/project/project-detail/naik.png'></td>";
+            // } else if ($row['rata_rata_harga'] < $row['rata_rata_harga_kemarin']) {
+            //     echo "<td><img src='images/project/project-detail/turun.png'></td>";
+            // } else {
+            //     echo "<td><img src='images/project/project-detail/sama.png'></td>";
+            // }
             echo "</tr>";
             echo "</tbody>";
         }
@@ -118,4 +123,7 @@ GROUP BY db.nama_barang, db.tanggal, db.gambar
     // Tutup koneksi
     mysqli_close($koneksi);
     ?>
+<<<<<<< HEAD
+</div>
+=======
 </div>
