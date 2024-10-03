@@ -93,7 +93,7 @@
 
           <h3 class="mb-4" data-aos="fade-up" data-aos-delay="300">Klik Menu dibawah untuk Menampilkan Lokasi Indrustri
             Kecil Menengah</h3>
-          <p class="text-dark">*daftar IKM di filter berdasarkan jesni produk</p>
+          <p class="text-dark">*daftar IKM di filter berdasarkan jenis produk</p>
         </div>
       </div>
       <div class="container ">

@@ -1,9 +1,9 @@
 <?php
-//session_start();
-//if (!isset($_SESSION['username'])) {
-//    header("Location: login.php");
- //   exit();
-//}
+session_start();
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+   exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +41,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10 dashboard-box">
-                <h1 class="text-center">Selamat Datang, <?= $_SESSION['username']; ?></h1>
+    <h1 class="text-center">Selamat Datang,<?= $_SESSION['username']; ?></h1>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">

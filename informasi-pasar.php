@@ -40,28 +40,12 @@
                <?php
                try {
                     $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    $username = 'root';
-=======
                     $user = 'root';
->>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
-=======
-                    $user = 'root';
->>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                     $password = '';
                     $options = array(
                          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                     );
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    $pdo = new PDO($dsn, $username, $password, $options);
-=======
                     $pdo = new PDO($dsn, $user, $password, $options);
->>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
-=======
-                    $pdo = new PDO($dsn, $user, $password, $options);
->>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                } catch (PDOException $e) {
                     die("Koneksi gagal: " . $e->getMessage());
                }
@@ -77,27 +61,6 @@
                          <!-- <div class="table-responsive-lg"> -->
                          <table class="table table-responsive">
                               <?php
-<<<<<<< HEAD
-<<<<<<< HEAD
-                              $query_checkbox = "SELECT nama_barang, FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, tanggal, 
-                                FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, FLOOR(AVG(selisih)) AS selisih_rata_rata, gambar
-                                FROM (
-                                    SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal,
-                                    ROW_NUMBER() OVER (PARTITION BY nama_barang ORDER BY tanggal DESC) AS rn, gambar
-                                    FROM data_barang_bandar
-                                    UNION ALL
-                                    SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal,
-                                    ROW_NUMBER() OVER (PARTITION BY nama_barang ORDER BY tanggal DESC) AS rn, gambar
-                                    FROM data_barang_pahing
-                                    UNION ALL
-                                    SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal,
-                                    ROW_NUMBER() OVER (PARTITION BY nama_barang ORDER BY tanggal DESC) AS rn, gambar
-                                    FROM data_barang_setonobetek
-                                ) AS ranked
-                                WHERE rn = 1 GROUP BY nama_barang";
-=======
-=======
->>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                               $query_checkbox = "SELECT nama_barang, 
        FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, 
        FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, 
@@ -122,65 +85,60 @@ FROM (
 ) AS ranked
 GROUP BY nama_barang, gambar
 ";
-<<<<<<< HEAD
->>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
-=======
->>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
 
                               $stmt = $pdo->query($query_checkbox);
                               if ($stmt->rowCount() > 0) {
                                    echo "
                     <tr>
                     <label>
-                    <input type='checkbox' id='select-all'> Select All
+                        <input type='checkbox' id='select-all'> Select All
                     </label>
-                    </tr>";
-                                   while ($row_checkbox = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                        $field_data = htmlspecialchars($row_checkbox['nama_barang'], ENT_QUOTES, 'UTF-8');
-                                        echo "
+                </tr>";
+                while ($row_checkbox = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $field_data = htmlspecialchars($row_checkbox['nama_barang'], ENT_QUOTES, 'UTF-8');
+                    echo "
                     <tr>
-                    <label>
-                    <input type='checkbox' name='filter[]' value='$field_data'> 
-                    $field_data</label>
+                        <label>
+                            <input type='checkbox' name='filter[]' value='$field_data'> 
+                            $field_data
+                        </label>
                     </tr>";
-                                   }
-                              } else {
-                                   echo "Tidak ada data untuk ditampilkan.";
-                              }
-                              ?>
-                              <br>
-                              <script>
-                                   // fungsi select all
-                                   document.getElementById('select-all').addEventListener('change', function () {
-                                        var checkboxes = document.querySelectorAll("input[name='filter[]']");
-                                        checkboxes.forEach(function (checkbox) {
-                                             checkbox.checked = document.getElementById('select-all').checked;
-                                        });
-                                        updateSelectedCount();
-                                   });
+                }
+            } else {
+                echo "Tidak ada data untuk ditampilkan.";
+            }
+            ?>
+            <br>
+            <script>
+                document.getElementById('select-all').addEventListener('change', function () {
+                    var checkboxes = document.querySelectorAll("input[name='filter[]']");
+                    checkboxes.forEach(function (checkbox) {
+                        checkbox.checked = document.getElementById('select-all').checked;
+                    });
+                    updateSelectedCount();
+                });
 
-                                   // fungsi check box
-                                   var checkboxes = document.querySelectorAll("input[name='filter[]']");
-                                   checkboxes.forEach(function (checkbox) {
-                                        checkbox.addEventListener('change', function () {
-                                             updateSelectedCount();
-                                        });
-                                   });
+                var checkboxes = document.querySelectorAll("input[name='filter[]']");
+                checkboxes.forEach(function (checkbox) {
+                    checkbox.addEventListener('change', function () {
+                        updateSelectedCount();
+                    });
+                });
 
-                                   // fungsi count select
-                                   function updateSelectedCount() {
-                                        var selectedCheckboxes = document.querySelectorAll("input[name='filter[]']:checked");
-                                        document.getElementById('selected-count').innerText = selectedCheckboxes.length;
-                                   }
-                              </script>
+                function updateSelectedCount() {
+                    var selectedCheckboxes = document.querySelectorAll("input[name='filter[]']:checked");
+                    document.getElementById('selected-count').innerText = selectedCheckboxes.length;
+                }
+            </script>
+        </table>
+        <button type="submit" value="Filter" class="button blob btn-primary btn">
+            <span>Filter</span>
+        </button>
+    </form>
+</div>
 
-                         </table>
-                         <!-- </div> -->
-                         <button type="submit" value="Filter" class="button blob btn-primary btn">
-                              <span>Filter</span>
-                         </button>
-                    </form>
-               </div>
+<!-- Bagian lain dari script sama, tidak ada konflik kode lagi -->
+
           </div>
           </div>
           <div class="bg-white mt-3">
@@ -202,15 +160,7 @@ GROUP BY nama_barang, gambar
                                    </div>
                                    <div class="col-md-8">
                                         <div class="card-title">
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                             <p>naik</p>
-=======
                                              <p>turun</p>
->>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
-=======
-                                             <p>turun</p>
->>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                                         </div>
                                    </div>
                               </div>
@@ -222,15 +172,7 @@ GROUP BY nama_barang, gambar
                                    </div>
                                    <div class="col-md-8">
                                         <div class="card-title">
-<<<<<<< HEAD
-<<<<<<< HEAD
-                                             <p>turun</p>
-=======
                                              <p>naik</p>
->>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
-=======
-                                             <p>naik</p>
->>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                                         </div>
                                    </div>
                               </div>
@@ -265,78 +207,57 @@ GROUP BY nama_barang, gambar
 
                          $pdo = new PDO($dsn, $username, $password, $options);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-                         $qry = "SELECT nama_barang, FLOOR(AVG(harga_sekarang)) AS rata_rata_harga, tanggal, FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, FLOOR(AVG(selisih)) AS selisih_rata_rata, gambar
-            FROM (
-                SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal,
-                       ROW_NUMBER() OVER (PARTITION BY nama_barang ORDER BY tanggal DESC) AS rn,
-                       gambar
-                FROM data_barang_bandar
-                UNION ALL
-                SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal,
-                       ROW_NUMBER() OVER (PARTITION BY nama_barang ORDER BY tanggal DESC) AS rn,
-                       gambar
-                FROM data_barang_pahing
-                UNION ALL
-                SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal,
-                       ROW_NUMBER() OVER (PARTITION BY nama_barang ORDER BY tanggal DESC) AS rn,
-                       gambar
-                FROM data_barang_setonobetek
-            ) AS ranked
-            WHERE rn = 1
-            GROUP BY nama_barang;";
-=======
-=======
->>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
-                         $qry = "SELECT nama_barang, 
-               CASE WHEN FLOOR(AVG(harga_sekarang)) = 0 THEN NULL ELSE FLOOR(AVG(harga_sekarang)) END AS rata_rata_harga, 
-               tanggal, 
-               FLOOR(AVG(harga_kemarin)) AS rata_rata_harga_kemarin, 
-               FLOOR(AVG(selisih)) AS selisih_rata_rata, 
-               gambar
-        FROM (
-            SELECT dbb.nama_barang, dbb.harga_sekarang, dbb.harga_kemarin, dbb.selisih, dbb.tanggal, dbb.gambar, dbb.status_validasi
-            FROM data_barang_bandar dbb
-            JOIN (
-                SELECT nama_barang, MAX(tanggal) AS max_tanggal
-                FROM data_barang_bandar 
-                WHERE status_validasi = 'true'
-                GROUP BY nama_barang
-            ) latest
-            ON dbb.nama_barang = latest.nama_barang AND dbb.tanggal = latest.max_tanggal
-            
-            UNION ALL
-            
-            SELECT dbp.nama_barang, dbp.harga_sekarang, dbp.harga_kemarin, dbp.selisih, dbp.tanggal, dbp.gambar, dbp.status_validasi
-            FROM data_barang_pahing dbp
-            JOIN (
-                SELECT nama_barang, MAX(tanggal) AS max_tanggal
-                FROM data_barang_pahing 
-                WHERE status_validasi = 'true'
-                GROUP BY nama_barang
-            ) latest
-            ON dbp.nama_barang = latest.nama_barang AND dbp.tanggal = latest.max_tanggal
-            
-            UNION ALL
-            
-            SELECT dbs.nama_barang, dbs.harga_sekarang, dbs.harga_kemarin, dbs.selisih, dbs.tanggal, dbs.gambar, dbs.status_validasi
-            FROM data_barang_setonobetek dbs
-            JOIN (
-                SELECT nama_barang, MAX(tanggal) AS max_tanggal
-                FROM data_barang_setonobetek 
-                WHERE status_validasi = 'true'
-                GROUP BY nama_barang
-            ) latest
-            ON dbs.nama_barang = latest.nama_barang AND dbs.tanggal = latest.max_tanggal
-        ) AS ranked
-        GROUP BY nama_barang, tanggal, gambar;";
-
-<<<<<<< HEAD
->>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
-=======
->>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
-
+                         $qry = "SELECT 
+    nama_barang, 
+    CASE 
+        WHEN FLOOR(AVG(CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END)) = 0 
+        THEN NULL 
+        ELSE FLOOR(AVG(CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END)) 
+    END AS rata_rata_harga, 
+    tanggal, 
+    FLOOR(AVG(CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END)) AS rata_rata_harga_kemarin, 
+    FLOOR(AVG(CASE 
+        WHEN harga_sekarang > 0 AND harga_kemarin > 0 THEN harga_sekarang - harga_kemarin 
+        ELSE NULL 
+    END)) AS selisih_rata_rata, 
+    gambar
+FROM (
+    SELECT dbb.nama_barang, dbb.harga_sekarang, dbb.harga_kemarin, dbb.selisih, dbb.tanggal, dbb.gambar, dbb.status_validasi
+    FROM data_barang_bandar dbb
+    JOIN (
+        SELECT nama_barang, MAX(tanggal) AS max_tanggal
+        FROM data_barang_bandar 
+        WHERE status_validasi = 'true'
+        GROUP BY nama_barang
+    ) latest
+    ON dbb.nama_barang = latest.nama_barang AND dbb.tanggal = latest.max_tanggal
+    
+    UNION ALL
+    
+    SELECT dbp.nama_barang, dbp.harga_sekarang, dbp.harga_kemarin, dbp.selisih, dbp.tanggal, dbp.gambar, dbp.status_validasi
+    FROM data_barang_pahing dbp
+    JOIN (
+        SELECT nama_barang, MAX(tanggal) AS max_tanggal
+        FROM data_barang_pahing 
+        WHERE status_validasi = 'true'
+        GROUP BY nama_barang
+    ) latest
+    ON dbp.nama_barang = latest.nama_barang AND dbp.tanggal = latest.max_tanggal
+    
+    UNION ALL
+    
+    SELECT dbs.nama_barang, dbs.harga_sekarang, dbs.harga_kemarin, dbs.selisih, dbs.tanggal, dbs.gambar, dbs.status_validasi
+    FROM data_barang_setonobetek dbs
+    JOIN (
+        SELECT nama_barang, MAX(tanggal) AS max_tanggal
+        FROM data_barang_setonobetek 
+        WHERE status_validasi = 'true'
+        GROUP BY nama_barang
+    ) latest
+    ON dbs.nama_barang = latest.nama_barang AND dbs.tanggal = latest.max_tanggal
+) AS ranked
+GROUP BY nama_barang, tanggal, gambar
+";
                          $stmt = $pdo->query($qry);
 
                          if ($stmt->rowCount() > 0) {
@@ -396,15 +317,7 @@ GROUP BY nama_barang, gambar
 
           <!-- fiilter untuk rentang tanggal -->
           <div class="contaier">
-<<<<<<< HEAD
-<<<<<<< HEAD
-               <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">DataTabel Harga Barang seluruh area
-=======
                <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">Data Tabel Harga Barang seluruh area
->>>>>>> ce171376424a9f5743fb2ee55417c27a930e2979
-=======
-               <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">Data Tabel Harga Barang seluruh area
->>>>>>> 7c1844e4994953f927ddeebd0212a25d82e5242f
                </h2>
                <div class="gx-5 d-flex justify-content-center my-5" data-aos="fade-up">
                     <div class="border border-dark rounded px-4 py-4  my-5">
