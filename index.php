@@ -754,7 +754,7 @@ try {
      $servername = "localhost";
      $username = "root";
      $password = '';
-     $dbname = "kuesioner";
+     $dbname = "data_harga_pokok";
 
      $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -799,7 +799,7 @@ try {
                               $server = 'localhost';
                               $user = 'root';
                               $password = '';
-                              $dbname = 'kuesioner';
+                              $dbname = 'data_harga_pokok';
 
                               $conn = new mysqli($server, $user, $password, $dbname);
 

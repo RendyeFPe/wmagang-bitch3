@@ -316,21 +316,65 @@ GROUP BY nama_barang, tanggal, gambar
           </div>
 
           <!-- fiilter untuk rentang tanggal -->
-          <div class="contaier">
-               <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">Data Tabel Harga Barang seluruh area
-               </h2>
-               <div class="gx-5 d-flex justify-content-center my-5" data-aos="fade-up">
-                    <div class="border border-dark rounded px-4 py-4  my-5">
-                         <p>Pilih tanggal untuk menampilkan data tabel</p>
-                         <span for="tanggal" id="inputGroup-sizing-sm" class="input-group-text">Pilih
-                              tanggal:</span>
-                         <input type="date" class="form-control" aria-label="Small"
-                              aria-describedby="inputGroup-sizing-sm" id="tanggal">
-                         <div class="mt-2" id="hasil"></div>
-                    </div>
-               </div>
-          </div>
-          </div>
+          <div class="container">
+    <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">Data Tabel Harga Barang seluruh area</h2>
+    <div class="gx-5 d-flex justify-content-center my-5" data-aos="fade-up">
+        <div class="border border-dark rounded px-4 py-4 my-5">
+            <p>Pilih tanggal untuk menampilkan data tabel</p>
+            <label for="tanggal" id="inputGroup-sizing-sm" class="input-group-text">Pilih tanggal:</label>
+            <input type="date" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="tanggal">
+            <div class="mt-2" id="hasil"></div>
+        </div>
+    </div>
+</div>
+
+<?php
+// Koneksi ke database
+try {
+     $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
+     $username = 'root';
+     $password = '';
+     $options = array(
+         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+     );
+     $pdo = new PDO($dsn, $username, $password, $options);
+ } catch (PDOException $e) {
+     die("Koneksi gagal: " . $e->getMessage());
+ }
+ 
+ // Menangani input tanggal
+ $tanggal_dipilih = date('Y-m-d', strtotime($_POST['tanggal']));
+ echo "Tanggal dipilih: " . $tanggal_dipilih;
+ if ($_SERVER["REQUEST_METHOD"] == "POST") {
+     if (!empty($_POST['tanggal'])) {
+         $tanggal_dipilih = $_POST['tanggal'];
+     }
+ }
+ 
+ if (!empty($tanggal_dipilih)) {
+     // Bagian query SQL dengan filter tanggal
+     echo $qry;
+
+$stmt = $pdo->prepare($query);
+if (!empty($tanggal_dipilih)) {
+    $stmt->bindValue(':tanggal_dipilih', $tanggal_dipilih);
+}
+
+ 
+     if ($stmt->rowCount() > 0) {
+         echo "<div class='container'><div class='row row-cols-1 row-cols-lg-5 g-2 g-lg-2 d-flex justify-content-center'>";
+         while ($row = $stmt->fetch()) {
+             $nama_barang = $row["nama_barang"];
+             $rata_rata_harga = $row["rata_rata_harga"];
+             $rata_rata_harga_kemarin = $row["rata_rata_harga_kemarin"];
+             $selisih_rata_rata = $row["selisih_rata_rata"];
+               }
+          } else {
+               echo "<p class='text-center'>Tidak ada data untuk tanggal yang dipilih.</p>";
+           }
+       }
+?>
      </section>
 </body>
 

@@ -88,7 +88,7 @@
                         <p class="fw-bolder text-white">
                             <?php
                             // koneksi
-                            $conn = mysqli_connect('localhost', 'root', '', 'db_counter');
+                            $conn = mysqli_connect('localhost', 'root', '', 'data_harga_pokok');
 
                             // pilih database
                             $count_query = mysqli_query($conn, "SELECT * FROM tb_counter");

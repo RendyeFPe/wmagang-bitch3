@@ -92,16 +92,9 @@ GROUP BY d.nama_barang
         echo "</div>";
     } else {
         echo "<p>Tidak ada data yang ditemukan untuk tanggal $tanggal</p>";
-    }
+    };
 
     // Tutup koneksi
     mysqli_close($koneksi);
     ?>
-<<<<<<< HEAD
-<<<<<<< HEAD
-</div>
-=======
-</div>
-=======
-</div>
->>>>>>> 7c1844e (kontol)
+
