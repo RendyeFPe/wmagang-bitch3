@@ -2,10 +2,10 @@
 session_start();
 
 // Koneksi ke database
-$conn = new mysqli("localhost", "root", "", "db_pedagang");
+$koneksi = new mysqli('localhost', 'root', '', 'db_pedagang');
 
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
+if ($koneksi->connect_error) {
+    die("Koneksi gagal: " . $koneksi->connect_error);
 }
 
 // Ambil data dari form login
@@ -14,7 +14,7 @@ $password = $_POST['password'];
 
 // Cek apakah username ada di database
 $sql = "SELECT * FROM users WHERE username = '$username'";
-$result = $conn->query($sql);
+$result = $koneksi->query($sql);
 
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
