@@ -91,54 +91,55 @@ GROUP BY nama_barang, gambar
                                    echo "
                     <tr>
                     <label>
-                        <input type='checkbox' id='select-all'> Select All
+                    <input type='checkbox' id='select-all'> Select All
                     </label>
-                </tr>";
-                while ($row_checkbox = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $field_data = htmlspecialchars($row_checkbox['nama_barang'], ENT_QUOTES, 'UTF-8');
-                    echo "
-                    <tr>
-                        <label>
-                            <input type='checkbox' name='filter[]' value='$field_data'> 
-                            $field_data
-                        </label>
                     </tr>";
-                }
-            } else {
-                echo "Tidak ada data untuk ditampilkan.";
-            }
-            ?>
-            <br>
-            <script>
-                document.getElementById('select-all').addEventListener('change', function () {
-                    var checkboxes = document.querySelectorAll("input[name='filter[]']");
-                    checkboxes.forEach(function (checkbox) {
-                        checkbox.checked = document.getElementById('select-all').checked;
-                    });
-                    updateSelectedCount();
-                });
+                                   while ($row_checkbox = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                        $field_data = htmlspecialchars($row_checkbox['nama_barang'], ENT_QUOTES, 'UTF-8');
+                                        echo "
+                    <tr>
+                    <label>
+                    <input type='checkbox' name='filter[]' value='$field_data'> 
+                    $field_data</label>
+                    </tr>";
+                                   }
+                              } else {
+                                   echo "Tidak ada data untuk ditampilkan.";
+                              }
+                              ?>
+                              <br>
+                              <script>
+                                   // fungsi select all
+                                   document.getElementById('select-all').addEventListener('change', function () {
+                                        var checkboxes = document.querySelectorAll("input[name='filter[]']");
+                                        checkboxes.forEach(function (checkbox) {
+                                             checkbox.checked = document.getElementById('select-all').checked;
+                                        });
+                                        updateSelectedCount();
+                                   });
 
-                var checkboxes = document.querySelectorAll("input[name='filter[]']");
-                checkboxes.forEach(function (checkbox) {
-                    checkbox.addEventListener('change', function () {
-                        updateSelectedCount();
-                    });
-                });
+                                   // fungsi check box
+                                   var checkboxes = document.querySelectorAll("input[name='filter[]']");
+                                   checkboxes.forEach(function (checkbox) {
+                                        checkbox.addEventListener('change', function () {
+                                             updateSelectedCount();
+                                        });
+                                   });
 
-                function updateSelectedCount() {
-                    var selectedCheckboxes = document.querySelectorAll("input[name='filter[]']:checked");
-                    document.getElementById('selected-count').innerText = selectedCheckboxes.length;
-                }
-            </script>
-        </table>
-        <button type="submit" value="Filter" class="button blob btn-primary btn">
-            <span>Filter</span>
-        </button>
-    </form>
-</div>
+                                   // fungsi count select
+                                   function updateSelectedCount() {
+                                        var selectedCheckboxes = document.querySelectorAll("input[name='filter[]']:checked");
+                                        document.getElementById('selected-count').innerText = selectedCheckboxes.length;
+                                   }
+                              </script>
 
-<!-- Bagian lain dari script sama, tidak ada konflik kode lagi -->
-
+                         </table>
+                         <!-- </div> -->
+                         <button type="submit" value="Filter" class="button blob btn-primary btn">
+                              <span>Filter</span>
+                         </button>
+                    </form>
+               </div>
           </div>
           </div>
           <div class="bg-white mt-3">
@@ -195,246 +196,157 @@ GROUP BY nama_barang, gambar
                     </div>
                </center>
                <div class="row row-cols-1 row-cols-lg-5 g-2 g-lg-2 d-flex justify-content-center" data-aos="fade-up">
-    <?php
-    try {
-        $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
-        $username = 'root';
-        $password = '';
-        $options = array(
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        );
+               <?php
+try {
+     $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
+     $username = 'root';
+     $password = '';
+     $options = array(
+          PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+          PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+     );
 
-        $pdo = new PDO($dsn, $username, $password, $options);
+     $pdo = new PDO($dsn, $username, $password, $options);
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['tanggal'])) {
-            $tanggal_dipilih = date('Y-m-d', strtotime($_POST['tanggal']));
+     $qry = "SELECT 
+nama_barang, 
+CASE 
+WHEN FLOOR(AVG(CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END)) = 0 
+THEN NULL 
+ELSE FLOOR(AVG(CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END)) 
+END AS rata_rata_harga, 
+tanggal, 
+FLOOR(AVG(CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END)) AS rata_rata_harga_kemarin, 
+FLOOR(AVG(CASE 
+WHEN harga_sekarang > 0 AND harga_kemarin > 0 THEN harga_sekarang - harga_kemarin 
+ELSE NULL 
+END)) AS selisih_rata_rata, 
+gambar
+FROM (
+SELECT dbb.nama_barang, dbb.harga_sekarang, dbb.harga_kemarin, dbb.selisih, dbb.tanggal, dbb.gambar, dbb.status_validasi
+FROM data_barang_bandar dbb
+JOIN (
+SELECT nama_barang, MAX(tanggal) AS max_tanggal
+FROM data_barang_bandar 
+WHERE status_validasi = 'true'
+GROUP BY nama_barang
+) latest
+ON dbb.nama_barang = latest.nama_barang AND dbb.tanggal = latest.max_tanggal
 
-            $query = "
-                SELECT 
-                    nama_barang, 
-                    FLOOR(AVG(CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END)) AS rata_rata_harga, 
-                    tanggal, 
-                    FLOOR(AVG(CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END)) AS rata_rata_harga_kemarin, 
-                    FLOOR(AVG(CASE WHEN harga_sekarang > 0 AND harga_kemarin > 0 THEN harga_sekarang - harga_kemarin ELSE NULL END)) AS selisih_rata_rata, 
-                    gambar
-                FROM (
-                    SELECT dbb.nama_barang, dbb.harga_sekarang, dbb.harga_kemarin, dbb.selisih, dbb.tanggal, dbb.gambar, dbb.status_validasi
-                    FROM data_barang_bandar dbb
-                    WHERE dbb.tanggal = :tanggal_dipilih AND dbb.status_validasi = 'true'
-                    
-                    UNION ALL
-                    
-                    SELECT dbp.nama_barang, dbp.harga_sekarang, dbp.harga_kemarin, dbp.selisih, dbp.tanggal, dbp.gambar, dbp.status_validasi
-                    FROM data_barang_pahing dbp
-                    WHERE dbp.tanggal = :tanggal_dipilih AND dbp.status_validasi = 'true'
-                    
-                    UNION ALL
-                    
-                    SELECT dbs.nama_barang, dbs.harga_sekarang, dbs.harga_kemarin, dbs.selisih, dbs.tanggal, dbs.gambar, dbs.status_validasi
-                    FROM data_barang_setonobetek dbs
-                    WHERE dbs.tanggal = :tanggal_dipilih AND dbs.status_validasi = 'true'
-                ) AS ranked
-                GROUP BY nama_barang, tanggal, gambar
-            ";
+UNION ALL
 
-            $stmt = $pdo->prepare($query);
-            $stmt->bindParam(':tanggal_dipilih', $tanggal_dipilih);
-            $stmt->execute();
+SELECT dbp.nama_barang, dbp.harga_sekarang, dbp.harga_kemarin, dbp.selisih, dbp.tanggal, dbp.gambar, dbp.status_validasi
+FROM data_barang_pahing dbp
+JOIN (
+SELECT nama_barang, MAX(tanggal) AS max_tanggal
+FROM data_barang_pahing 
+WHERE status_validasi = 'true'
+GROUP BY nama_barang
+) latest
+ON dbp.nama_barang = latest.nama_barang AND dbp.tanggal = latest.max_tanggal
 
-            if ($stmt->rowCount() > 0) {
-                while ($row = $stmt->fetch()) {
-                    $nama_barang = isset($row["nama_barang"]) ? $row["nama_barang"] : "N/A";
-                    $rata_rata_harga = isset($row["rata_rata_harga"]) ? $row["rata_rata_harga"] : "N/A";
-                    $rata_rata_harga_kemarin = isset($row["rata_rata_harga_kemarin"]) ? $row["rata_rata_harga_kemarin"] : "N/A";
-                    $gambar = isset($row["gambar"]) ? $row["gambar"] : "default.png";
-                    $selisih_rata_rata = isset($row["selisih_rata_rata"]) ? $row["selisih_rata_rata"] : "N/A";
+UNION ALL
 
-                    if ($rata_rata_harga < $rata_rata_harga_kemarin) {
-                        $keterangan = "images/komoditas/down.png";
-                        $selisih_rata_rata = "<p class='card-title mb-1 text-success'>Rp.$selisih_rata_rata</p>";
-                    } else if ($rata_rata_harga > $rata_rata_harga_kemarin) {
-                        $keterangan = "images/komoditas/up.png";
-                        $selisih_rata_rata = "<p class='card-title mb-1 text-danger'>Rp.$selisih_rata_rata</p>";
-                    } else {
-                        $keterangan = "images/komoditas/sama.png";
-                        $selisih_rata_rata = "<p class='card-title mb-1 text-warning'>Rp.$selisih_rata_rata</p>";
-                    }
+SELECT dbs.nama_barang, dbs.harga_sekarang, dbs.harga_kemarin, dbs.selisih, dbs.tanggal, dbs.gambar, dbs.status_validasi
+FROM data_barang_setonobetek dbs
+JOIN (
+SELECT nama_barang, MAX(tanggal) AS max_tanggal
+FROM data_barang_setonobetek 
+WHERE status_validasi = 'true'
+GROUP BY nama_barang
+) latest
+ON dbs.nama_barang = latest.nama_barang AND dbs.tanggal = latest.max_tanggal
+) AS ranked
+GROUP BY nama_barang, tanggal, gambar";
 
-                    echo "<div class='col ms-2'>
-                          <div class='card border-0 bg-transparent'>
-                              <div class='card-img rounded-3'>
-                                  <img src='./images/komoditas/$gambar' class='img-fluid shadow shadow-sm bg-transparent border-3 p-0' alt=''>
-                              </div>
-                              <div class='card-img-overlay bg-white head mx-3 px-1 mb-0 border-0'>
-                                  <p class='text-center mb-0 mt-0 px-0 mx-0 '>$nama_barang</p>
-                                  <hr class='border border-black border-2 my-0'>
-                                  <div class='row gx-1 d-flex justify-content-center'>
-                                      <div class='col py-1 mx-auto body-card'>
-                                          <p class='card-title fw-bold mb-2'>Sekarang</p>
-                                          <p class='card-title mb-1'>Rp.$rata_rata_harga</p>
-                                          <center>
-                                              <img src='$keterangan' class='keterangan my-1'>
-                                          </center>
-                                      </div>
-                                      <div class='col py-1 body-card'>
-                                          <p class='card-title fw-bold mb-2'>Sebelumnya</p>
-                                          <p class='card-title mb-1 text-silent'>Rp.$rata_rata_harga_kemarin</p>
-                                          $selisih_rata_rata
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>";
-                }
-            } else {
-                echo "<p class='text-center'>Tidak ada data untuk tanggal yang dipilih.</p>";
-            }
-        } else {
-            echo "<p class='text-center'>Pilih tanggal terlebih dahulu.</p>";
+
+     $stmt = $pdo->query($qry);
+
+     if ($stmt->rowCount() > 0) {
+          while ($row = $stmt->fetch()) {
+               $nama_barang = $row["nama_barang"];
+               $rata_rata_harga = $row["rata_rata_harga"];
+               $rata_rata_harga_kemarin = $row["rata_rata_harga_kemarin"];
+               $gambar = $row["gambar"];
+               $selisih_rata_rata = $row["selisih_rata_rata"];
+
+               if ($rata_rata_harga < $rata_rata_harga_kemarin) {
+                    $keterangan = "images/komoditas/down.png";
+                    $selisih_rata_rata = "<p class='card-title mb-1 text-success'>Rp.$selisih_rata_rata</p>";
+               } else if ($rata_rata_harga > $rata_rata_harga_kemarin) {
+                    $keterangan = "images/komoditas/up.png";
+                    $selisih_rata_rata = "<p class='card-title mb-1 text-danger'>Rp.$selisih_rata_rata</p>";
+               } else {
+                    $keterangan = "images/komoditas/sama.png";
+                    $selisih_rata_rata = "<p class='card-title mb-1 text-warning'>Rp.$selisih_rata_rata</p>";
+               }
+
+               echo "<div class='col ms-2'>
+  <div class='card border-0 bg-transparent'>
+      <div class='card-img rounded-3'>
+          <img src='./images/komoditas/$gambar' class='img-fluid shadow shadow-sm bg-transparent border-3 p-0' alt=''>
+      </div>
+      <div class='card-img-overlay bg-white head mx-3 px-1 mb-0 border-0'>
+          <p class='text-center mb-0 mt-0 px-0 mx-0 '>$nama_barang</p>
+          <hr class='border border-black border-2 my-0'>
+          <div class='row gx-1 d-flex justify-content-center'>
+              <div class='col py-1 mx-auto body-card'>
+                  <p class='card-title fw-bold mb-2'>Sekarang</p>
+                  <p class='card-title mb-1'>Rp.$rata_rata_harga</p>
+                  <center>
+                      <img src='$keterangan' class='keterangan my-1'>
+                  </center>
+              </div>
+              <div class='col py-1 body-card'>
+                  <p class='card-title fw-bold mb-2'>Sebelumnya</p>
+                  <p class='card-title mb-1 text-silent'>Rp.$rata_rata_harga_kemarin</p>
+                  $selisih_rata_rata
+              </div>
+          </div>
+      </div>
+  </div>
+</div>";
+          }
+     }
+} catch (PDOException $e) {
+     echo "Koneksi database gagal: " . $e->getMessage();
+     exit();
+}
+?>
+<script>
+document.getElementById('tanggal').addEventListener('change', function() {
+    var tanggal = this.value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'your_php_file.php?tanggal=' + tanggal, true); // Ganti 'your_php_file.php' dengan nama file PHP
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            document.getElementById('hasil').innerHTML = xhr.responseText;
         }
-    } catch (PDOException $e) {
-        echo "Koneksi database gagal: " . $e->getMessage();
-    }
-    ?>
+    };
+    xhr.send();
+});
+</script>
 </div>
+               </div>
+          </div>
 
-<!-- Filter rentang tanggal -->
-<div class="container">
-    <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">Data Tabel Harga Barang seluruh area</h2>
-    <div class="gx-5 d-flex justify-content-center my-5" data-aos="fade-up">
-        <div class="border border-dark rounded px-4 py-4 my-5">
-            <p>Pilih tanggal untuk menampilkan data tabel</p>
-            <form method="POST">
-                <label for="tanggal" class="input-group-text">Pilih tanggal:</label>
-                <input type="date" class="form-control" name="tanggal" id="tanggal">
-                <button type="submit" class="btn btn-primary mt-2">Cari</button>
-            </form>
-            <div class="mt-2" id="hasil"></div>
-        </div>
-    </div>
-</div>
-
-<div class="row row-cols-1 row-cols-lg-5 g-2 g-lg-2 d-flex justify-content-center" data-aos="fade-up">
-    <?php
-    try {
-        $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
-        $username = 'root';
-        $password = '';
-        $options = array(
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        );
-
-        $pdo = new PDO($dsn, $username, $password, $options);
-
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['tanggal'])) {
-            $tanggal_dipilih = date('Y-m-d', strtotime($_POST['tanggal']));
-
-            $query = "
-                SELECT 
-                    nama_barang, 
-                    FLOOR(AVG(CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END)) AS rata_rata_harga, 
-                    tanggal, 
-                    FLOOR(AVG(CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END)) AS rata_rata_harga_kemarin, 
-                    FLOOR(AVG(CASE WHEN harga_sekarang > 0 AND harga_kemarin > 0 THEN harga_sekarang - harga_kemarin ELSE NULL END)) AS selisih_rata_rata, 
-                    gambar
-                FROM (
-                    SELECT dbb.nama_barang, dbb.harga_sekarang, dbb.harga_kemarin, dbb.selisih, dbb.tanggal, dbb.gambar, dbb.status_validasi
-                    FROM data_barang_bandar dbb
-                    WHERE dbb.tanggal = :tanggal_dipilih AND dbb.status_validasi = 'true'
-                    
-                    UNION ALL
-                    
-                    SELECT dbp.nama_barang, dbp.harga_sekarang, dbp.harga_kemarin, dbp.selisih, dbp.tanggal, dbp.gambar, dbp.status_validasi
-                    FROM data_barang_pahing dbp
-                    WHERE dbp.tanggal = :tanggal_dipilih AND dbp.status_validasi = 'true'
-                    
-                    UNION ALL
-                    
-                    SELECT dbs.nama_barang, dbs.harga_sekarang, dbs.harga_kemarin, dbs.selisih, dbs.tanggal, dbs.gambar, dbs.status_validasi
-                    FROM data_barang_setonobetek dbs
-                    WHERE dbs.tanggal = :tanggal_dipilih AND dbs.status_validasi = 'true'
-                ) AS ranked
-                GROUP BY nama_barang, tanggal, gambar
-            ";
-
-            $stmt = $pdo->prepare($query);
-            $stmt->bindParam(':tanggal_dipilih', $tanggal_dipilih);
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                while ($row = $stmt->fetch()) {
-                    $nama_barang = isset($row["nama_barang"]) ? $row["nama_barang"] : "N/A";
-                    $rata_rata_harga = isset($row["rata_rata_harga"]) ? $row["rata_rata_harga"] : "N/A";
-                    $rata_rata_harga_kemarin = isset($row["rata_rata_harga_kemarin"]) ? $row["rata_rata_harga_kemarin"] : "N/A";
-                    $gambar = isset($row["gambar"]) ? $row["gambar"] : "default.png";
-                    $selisih_rata_rata = isset($row["selisih_rata_rata"]) ? $row["selisih_rata_rata"] : "N/A";
-
-                    if ($rata_rata_harga < $rata_rata_harga_kemarin) {
-                        $keterangan = "images/komoditas/down.png";
-                        $selisih_rata_rata = "<p class='card-title mb-1 text-success'>Rp.$selisih_rata_rata</p>";
-                    } else if ($rata_rata_harga > $rata_rata_harga_kemarin) {
-                        $keterangan = "images/komoditas/up.png";
-                        $selisih_rata_rata = "<p class='card-title mb-1 text-danger'>Rp.$selisih_rata_rata</p>";
-                    } else {
-                        $keterangan = "images/komoditas/sama.png";
-                        $selisih_rata_rata = "<p class='card-title mb-1 text-warning'>Rp.$selisih_rata_rata</p>";
-                    }
-
-                    echo "<div class='col ms-2'>
-                          <div class='card border-0 bg-transparent'>
-                              <div class='card-img rounded-3'>
-                                  <img src='./images/komoditas/$gambar' class='img-fluid shadow shadow-sm bg-transparent border-3 p-0' alt=''>
-                              </div>
-                              <div class='card-img-overlay bg-white head mx-3 px-1 mb-0 border-0'>
-                                  <p class='text-center mb-0 mt-0 px-0 mx-0 '>$nama_barang</p>
-                                  <hr class='border border-black border-2 my-0'>
-                                  <div class='row gx-1 d-flex justify-content-center'>
-                                      <div class='col py-1 mx-auto body-card'>
-                                          <p class='card-title fw-bold mb-2'>Sekarang</p>
-                                          <p class='card-title mb-1'>Rp.$rata_rata_harga</p>
-                                          <center>
-                                              <img src='$keterangan' class='keterangan my-1'>
-                                          </center>
-                                      </div>
-                                      <div class='col py-1 body-card'>
-                                          <p class='card-title fw-bold mb-2'>Sebelumnya</p>
-                                          <p class='card-title mb-1 text-silent'>Rp.$rata_rata_harga_kemarin</p>
-                                          $selisih_rata_rata
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>";
-                }
-            } else {
-                echo "<p class='text-center'>Tidak ada data untuk tanggal yang dipilih.</p>";
-            }
-        } else {
-            echo "<p class='text-center'>Pilih tanggal terlebih dahulu.</p>";
-        }
-    } catch (PDOException $e) {
-        echo "Koneksi database gagal: " . $e->getMessage();
-    }
-    ?>
-</div>
-
-<!-- Filter untuk rentang tanggal -->
-<div class="container">
-    <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">Data Tabel Harga Barang seluruh area</h2>
-    <div class="gx-5 d-flex justify-content-center my-5" data-aos="fade-up">
-        <div class="border border-dark rounded px-4 py-4 my-5">
-            <form method="POST" action="">
-                <p>Pilih tanggal untuk menampilkan data tabel</p>
-                <label for="tanggal" id="inputGroup-sizing-sm" class="input-group-text">Pilih tanggal:</label>
-                <input type="date" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="tanggal" name="tanggal">
-                <button type="submit" class="btn btn-primary mt-2">Cari</button>
-            </form>
-        </div>
-    </div>
-</div>
-
+<!-- fiilter untuk rentang tanggal -->
+ <!-- fiilter untuk rentang tanggal -->
+ <div class="contaier">
+               <h2 class="mt-5 text-center" data-aos="fade-up" data-aos-delay="200">Data Tabel Harga Barang seluruh area
+               </h2>
+               <div class="gx-5 d-flex justify-content-center my-5" data-aos="fade-up">
+                    <div class="border border-dark rounded px-4 py-4  my-5">
+                         <p>Pilih tanggal untuk menampilkan data tabel</p>
+                         <span for="tanggal" id="inputGroup-sizing-sm" class="input-group-text">Pilih
+                              tanggal:</span>
+                         <input type="date" class="form-control" aria-label="Small"
+                              aria-describedby="inputGroup-sizing-sm" id="tanggal">
+                         <div class="mt-2" id="hasil"></div>
+                    </div>
+               </div>
+          </div>
+          </div>
 
      </section>
 </body>

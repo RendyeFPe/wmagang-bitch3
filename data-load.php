@@ -1,68 +1,61 @@
 <div class="table-responsive-sm overflow-x-auto">
-    <?php
-    // load_data.php
-    
-    // Koneksi ke database
-    $koneksi = mysqli_connect('localhost', 'root', '', 'data_harga_pokok');
 
-    // Periksa koneksi
-    if (mysqli_connect_error()) {
-        echo "Koneksi database gagal: " . mysqli_connect_error();
-        exit();
-    }
+<?php
+$tanggal_pilih = isset($_GET['tanggal']) ? $_GET['tanggal'] : null;
 
-    // Ambil tanggal dari parameter GET
-    $tanggal = $_GET['tanggal'];
+try {
+    // Koneksi ke database menggunakan PDO
+    $dsn = 'mysql:host=localhost;dbname=data_harga_pokok';
+    $username = 'root';
+    $password = '';
+    $options = array(
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    );
+    $pdo = new PDO($dsn, $username, $password, $options);
 
-    // Lakukan kueri data berdasarkan tanggal, hanya menghitung nilai yang tidak NULL
-    $qry = "SELECT 
-    d.nama_barang, 
-    FLOOR(AVG(d.harga_sekarang)) AS rata_rata_harga, 
-    MAX(d.tanggal) AS tanggal,
-    FLOOR(AVG(d.harga_kemarin)) AS rata_rata_harga_kemarin, 
-    FLOOR(AVG(d.harga_sekarang) - AVG(d.harga_kemarin)) AS selisih_rata_rata, 
-    MAX(d.gambar) AS gambar
-FROM (
-    SELECT nama_barang, 
-           CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END AS harga_sekarang,
-           CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END AS harga_kemarin,
-           tanggal, 
-           gambar
-    FROM data_barang_bandar
-    UNION ALL
-    SELECT nama_barang, 
-           CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END AS harga_sekarang,
-           CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END AS harga_kemarin,
-           tanggal, 
-           gambar
-    FROM data_barang_pahing
-    UNION ALL
-    SELECT nama_barang, 
-           CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END AS harga_sekarang,
-           CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END AS harga_kemarin,
-           tanggal, 
-           gambar
-    FROM data_barang_setonobetek
-) AS d
-JOIN (
-    SELECT nama_barang, MAX(tanggal) AS max_tanggal
+    // Query untuk mendapatkan data berdasarkan tanggal yang dipilih
+    $qry = "
+    SELECT 
+        nama_barang, 
+        FLOOR(AVG(CASE WHEN harga_sekarang > 0 THEN harga_sekarang ELSE NULL END)) AS rata_rata_harga, 
+        tanggal, 
+        FLOOR(AVG(CASE WHEN harga_kemarin > 0 THEN harga_kemarin ELSE NULL END)) AS rata_rata_harga_kemarin, 
+        FLOOR(AVG(CASE WHEN harga_sekarang > 0 AND harga_kemarin > 0 THEN harga_sekarang - harga_kemarin ELSE NULL END)) AS selisih_rata_rata, 
+        gambar
     FROM (
-        SELECT nama_barang, tanggal FROM data_barang_bandar
-        UNION ALL
-        SELECT nama_barang, tanggal FROM data_barang_pahing
-        UNION ALL
-        SELECT nama_barang, tanggal FROM data_barang_setonobetek
-    ) AS sub
-    GROUP BY nama_barang
-) AS latest ON d.nama_barang = latest.nama_barang AND d.tanggal = latest.max_tanggal
-GROUP BY d.nama_barang
-";
+        SELECT dbb.nama_barang, dbb.harga_sekarang, dbb.harga_kemarin, dbb.selisih, dbb.tanggal, dbb.gambar, dbb.status_validasi
+        FROM data_barang_bandar dbb
+        WHERE dbb.status_validasi = 'true' AND (:tanggal_pilih IS NULL OR dbb.tanggal = :tanggal_pilih)
 
-    $result = mysqli_query($koneksi, $qry);
-    $no = 1;
+        UNION ALL
 
+        SELECT dbp.nama_barang, dbp.harga_sekarang, dbp.harga_kemarin, dbp.selisih, dbp.tanggal, dbp.gambar, dbp.status_validasi
+        FROM data_barang_pahing dbp
+        WHERE dbp.status_validasi = 'true' AND (:tanggal_pilih IS NULL OR dbp.tanggal = :tanggal_pilih)
+
+        UNION ALL
+
+        SELECT dbs.nama_barang, dbs.harga_sekarang, dbs.harga_kemarin, dbs.selisih, dbs.tanggal, dbs.gambar, dbs.status_validasi
+        FROM data_barang_setonobetek dbs
+        WHERE dbs.status_validasi = 'true' AND (:tanggal_pilih IS NULL OR dbs.tanggal = :tanggal_pilih)
+    ) AS ranked
+    GROUP BY nama_barang, tanggal, gambar";
+
+    // Siapkan statement
+    $stmt = $pdo->prepare($qry);
+
+    // Bind parameter tanggal yang dipilih
+    $stmt->bindParam(':tanggal_pilih', $tanggal_pilih);
+
+    // Eksekusi query
+    $stmt->execute();
+
+    // Ambil semua hasil
+    $rows = $stmt->fetchAll();
     // Tampilkan hasil dalam bentuk HTML
-    if (mysqli_num_rows($result) > 0) {
+
+    if (count($rows) > 0) {
         echo "<div class='container overflow-x-scroll'>
         <table border='1' class='table table-striped'>
             <thead>
@@ -76,7 +69,8 @@ GROUP BY d.nama_barang
             </tr>
             </thead>";
         
-        while ($row = mysqli_fetch_assoc($result)) {
+            $no = 1;
+            foreach ($rows as $row) {
             echo "<tbody>";
             echo "<tr>";
             echo "<td>" . $no++ . "</td>";
@@ -91,10 +85,12 @@ GROUP BY d.nama_barang
         echo "</table>";
         echo "</div>";
     } else {
-        echo "<p>Tidak ada data yang ditemukan untuk tanggal $tanggal</p>";
+        echo "<p>Tidak ada data yang ditemukan untuk tanggal yang dipilih</p>";
     };
-
+} catch (PDOException $e) {
+    // Menampilkan pesan kesalahan jika ada masalah koneksi atau query
+    echo "Koneksi database gagal: " . $e->getMessage();
+}
     // Tutup koneksi
-    mysqli_close($koneksi);
     ?>
 

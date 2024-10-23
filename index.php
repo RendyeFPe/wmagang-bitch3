@@ -118,10 +118,15 @@
           <div class="container-xxl">
                <div class="row">
                     <div class="col-lg-12 col-12 z-0" id="slide">
-                         <div class="owl-carousel owl-theme" id="project-slide">
+                    <div class="owl-carousel owl-theme" id="project-slide">
+                         
                               <div class="item project-wrapper" data-aos="fade-up" data-aos-delay="100">
-                                   <img src="images/project/banner 4.png" class="img-fluid" alt="project image">
+                                   <img src="images/project/Banner 7.png" class="img-fluid" alt="project image">
                               </div>
+
+                         <!--<div class="item project-wrapper" data-aos="fade-up" data-aos-delay="100">
+                                   <img src="images/project/banner 4.png" class="img-fluid" alt="project image">
+                              </div> -->
 
                               <div class="item project-wrapper" data-aos="fade-up">
                                    <img src="images/project/Banner 1.png" class="img-fluid" alt="project image">
@@ -448,9 +453,9 @@ try {
             db.nama_barang, 
             db.tanggal, 
             db.gambar, 
-            FLOOR(AVG(CASE WHEN db.harga_sekarang > 0 THEN db.harga_sekarang END)) AS rata_rata_harga, 
-            FLOOR(AVG(CASE WHEN db.harga_kemarin > 0 THEN db.harga_kemarin END)) AS rata_rata_harga_kemarin, 
-            FLOOR(AVG(db.selisih)) AS selisih_rata
+            FLOOR(AVG(CASE WHEN db.harga_sekarang > 0 THEN db.harga_sekarang ELSE NULL END)) AS rata_rata_harga, 
+            FLOOR(AVG(CASE WHEN db.harga_kemarin > 0 THEN db.harga_kemarin ELSE NULL END)) AS rata_rata_harga_kemarin, 
+            FLOOR(AVG(CASE WHEN db.harga_sekarang > 0 AND db.harga_kemarin > 0 THEN db.harga_sekarang - db.harga_kemarin ELSE NULL END)) AS selisih_rata_rata
         FROM (
             SELECT nama_barang, harga_sekarang, harga_kemarin, selisih, tanggal, gambar
             FROM data_barang_bandar
@@ -504,6 +509,7 @@ try {
         ON db.nama_barang = latest_data.nama_barang AND db.tanggal = latest_data.max_tanggal
         GROUP BY db.nama_barang, db.tanggal, db.gambar
     ";
+
  $stmt = $pdo->query($sql);
                ?>
         
@@ -517,7 +523,7 @@ try {
                                    $rata_rata_harga_kemarin = $row["rata_rata_harga_kemarin"];
                                    $gambar = $row["gambar"];
                                    // $selisih = $rata_rata_harga_kemarin - $rata_rata_harga;
-                                   $selisih_rata = $row["selisih_rata"];
+                                   $selisih_rata = $row["selisih_rata_rata"];
                                    if ($rata_rata_harga < $rata_rata_harga_kemarin) {
                                         $keterangan = "images/komoditas/down.png";
                                         $selisih_rata = "<p class='card-title mb-1 text-success'>Rp.$selisih_rata</p>";
