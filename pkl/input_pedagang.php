@@ -87,11 +87,11 @@
                 <div id="mapid"></div>
                 <div class="form-group">
                     <label for="latitude">Latitude</label>
-                    <input type="text" class="form-control" name="latitude" id="latitude" readonly required>
+                    <input type="text" class="form-control" name="latitude" id="latitude"  required>
                 </div>
                 <div class="form-group">
                     <label for="longitude">Longitude</label>
-                    <input type="text" class="form-control" name="longitude" id="longitude" readonly required>
+                    <input type="text" class="form-control" name="longitude" id="longitude"  required>
                 </div>
 
                 <div class="form-group">
@@ -113,7 +113,7 @@
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        var map = L.map('mapid').setView([-7.797068, 110.370529], 13); // Set default to Yogyakarta
+        var map = L.map('mapid').setView([-7.813248850548071, 112.0037612883607], 13); // Set default to Yogyakarta
 
         // Tambahkan tile dari OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
