@@ -2,7 +2,7 @@
 $server= "localhost";
 $user = "root";
 $password = "";
-$dbname = "disperdagin";
+$dbname = "data_harga_pokok";
 
 
 // Create connection

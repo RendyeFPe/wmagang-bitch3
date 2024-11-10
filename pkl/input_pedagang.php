@@ -8,21 +8,19 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         body {
-            background-image: url('gambar/walpaper5.jpg'); /* Wallpaper baru */
+            background-image: url('gambar/walpaper5.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             height: 100vh;
         }
-
         .form-container {
-            background-color: rgba(255, 255, 255, 1); /* Transparansi latar belakang */
+            background-color: rgba(255, 255, 255, 1);
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 50px;
         }
-
         h2 {
             text-align: center;
             margin-bottom: 20px;
@@ -30,19 +28,15 @@
             font-size: 2.5rem;
             font-weight: bold;
         }
-
         .btn-primary {
             width: 100%;
             background-color: #007bff;
             border-color: #007bff;
         }
-
         .btn-primary:hover {
             background-color: #0056b3;
             border-color: #004085;
         }
-
-        /* Map Styling */
         #mapid {
             height: 400px;
             margin-bottom: 20px;
@@ -51,12 +45,28 @@
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-start" style="height: 100vh;">
-        <div class="form-container col-md-9"> <!-- Modifikasi ukuran form menjadi 3/4 halaman -->
-            <h2>Formulir Input Data</h2> <!-- Judul bagian formulir -->
+        <div class="form-container col-md-9">
+            <h2>Formulir Input Data Pedagang</h2>
             <form action="proses_input_pedagang.php" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="no_registrasi">Nomor Registrasi</label>
+                    <input type="VARCHAR" class="form-control" name="no_registrasi" required>
+                </div>
+                <div class="form-group">
+                    <label for="nik">NIK KTP</label>
+                    <input type="number" class="form-control" name="nik" required>
+                </div>
                 <div class="form-group">
                     <label for="nama_pemilik">Nama Pemilik</label>
                     <input type="text" class="form-control" name="nama_pemilik" required>
+                </div>
+                <div class="form-group">
+                    <label for="kecamatan">Kecamatan</label>
+                    <input type="text" class="form-control" name="kecamatan" required>
+                </div>
+                <div class="form-group">
+                    <label for="nama_kelurahan">Nama Kelurahan</label>
+                    <input type="text" class="form-control" name="nama_kelurahan" required>
                 </div>
                 <div class="form-group">
                     <label for="alamat_ktp">Alamat KTP</label>
@@ -82,18 +92,15 @@
                     <label for="no_hp">No HP</label>
                     <input type="text" class="form-control" name="no_hp" required>
                 </div>
-
-                <!-- Peta untuk memilih lokasi -->
                 <div id="mapid"></div>
                 <div class="form-group">
                     <label for="latitude">Latitude</label>
-                    <input type="text" class="form-control" name="latitude" id="latitude"  required>
+                    <input type="text" class="form-control" name="latitude" id="latitude" required>
                 </div>
                 <div class="form-group">
                     <label for="longitude">Longitude</label>
-                    <input type="text" class="form-control" name="longitude" id="longitude"  required>
+                    <input type="text" class="form-control" name="longitude" id="longitude" required>
                 </div>
-
                 <div class="form-group">
                     <label for="foto_ktp">Upload Foto KTP</label>
                     <input type="file" class="form-control-file" name="foto_ktp" required>
@@ -113,25 +120,19 @@
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        var map = L.map('mapid').setView([-7.813248850548071, 112.0037612883607], 13); // Set default to Yogyakarta
-
-        // Tambahkan tile dari OpenStreetMap
+        var map = L.map('mapid').setView([-7.813248850548071, 112.0037612883607], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-
         var marker;
-
-        // Function untuk update koordinat
         function onMapClick(e) {
             if (marker) {
-                map.removeLayer(marker); // Hapus marker sebelumnya
+                map.removeLayer(marker);
             }
             marker = L.marker(e.latlng).addTo(map);
             document.getElementById('latitude').value = e.latlng.lat;
             document.getElementById('longitude').value = e.latlng.lng;
         }
-
         map.on('click', onMapClick);
     </script>
 </body>
