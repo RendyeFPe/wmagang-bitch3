@@ -50,7 +50,7 @@
             <form action="proses_input_pedagang.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="no_registrasi">Nomor Registrasi</label>
-                    <input type="VARCHAR" class="form-control" name="no_registrasi" required>
+                    <input type="text" class="form-control" name="no_registrasi" required>
                 </div>
                 <div class="form-group">
                     <label for="nik">NIK KTP</label>

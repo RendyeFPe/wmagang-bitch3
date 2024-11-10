@@ -102,7 +102,11 @@
                 foreach ($data_pedagang as $pedagang) {
                     echo "<tr>
                             <td>{$no}</td>
+                            <td>{$pedagang['no_registrasi']}</td>
+                            <td>{$pedagang['nik']}</td>
                             <td>{$pedagang['nama_pemilik']}</td>
+                            <td>{$pedagang['kecamatan']}</td>
+                            <td>{$pedagang['nama_kelurahan']}</td>
                             <td>{$pedagang['alamat_ktp']}</td>
                             <td>{$pedagang['alamat_usaha']}</td>
                             <td>{$pedagang['jenis_jualan']}</td>
