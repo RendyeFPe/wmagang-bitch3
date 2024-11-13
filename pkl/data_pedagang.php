@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Pedagang</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- Ikon Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> //Ikon Font Awesome 
     <style>
         body {
             background-image: url('gambar/walpaper2.jpg'); /* Wallpaper */
@@ -83,45 +83,45 @@
                 // $result = $koneksi->query($query);
 
                 // Contoh data dummy (silahkan ganti dengan data dari database Anda)
-                $data_pedagang = [
-                    [
-                        'nama_pemilik' => 'Budi Santoso',
-                        'alamat_ktp' => 'Jl. Mawar No. 23',
-                        'alamat_usaha' => 'Jl. Melati No. 10',
-                        'jenis_jualan' => 'Makanan Ringan',
-                        'jam_operasional' => '08:00 - 17:00',
-                        'no_hp' => '08123456789',
-                        'foto_ktp' => 'ktp_budi.jpg',
-                        'foto_nib' => 'nib_budi.jpg',
-                        'foto_lapak' => 'lapak_budi.jpg'
-                    ],
-                    // Tambahkan data pedagang lainnya di sini
-                ];
+                // $data_pedagang = [
+                //     [
+                //         'nama_pemilik' => 'Budi Santoso',
+                //         'alamat_ktp' => 'Jl. Mawar No. 23',
+                //         'alamat_usaha' => 'Jl. Melati No. 10',
+                //         'jenis_jualan' => 'Makanan Ringan',
+                //         'jam_operasional' => '08:00 - 17:00',
+                //         'no_hp' => '08123456789',
+                //         'foto_ktp' => 'ktp_budi.jpg',
+                //         'foto_nib' => 'nib_budi.jpg',
+                //         'foto_lapak' => 'lapak_budi.jpg'
+                //     ],
+                //     // Tambahkan data pedagang lainnya di sini
+                // ];
 
-                $no = 1;
-                foreach ($data_pedagang as $pedagang) {
-                    echo "<tr>
-                            <td>{$no}</td>
-                            <td>{$pedagang['no_registrasi']}</td>
-                            <td>{$pedagang['nik']}</td>
-                            <td>{$pedagang['nama_pemilik']}</td>
-                            <td>{$pedagang['kecamatan']}</td>
-                            <td>{$pedagang['nama_kelurahan']}</td>
-                            <td>{$pedagang['alamat_ktp']}</td>
-                            <td>{$pedagang['alamat_usaha']}</td>
-                            <td>{$pedagang['jenis_jualan']}</td>
-                            <td>{$pedagang['jam_operasional']}</td>
-                            <td>{$pedagang['no_hp']}</td>
-                            <td><img src='uploads/{$pedagang['foto_ktp']}' alt='Foto KTP' width='50'></td>
-                            <td><img src='uploads/{$pedagang['foto_nib']}' alt='Foto NIB' width='50'></td>
-                            <td><img src='uploads/{$pedagang['foto_lapak']}' alt='Foto Lapak' width='50'></td>
-                            <td>
-                                <a href='#' class='text-primary'><i class='fas fa-edit'></i></a>
-                                <a href='#' class='text-danger ml-2'><i class='fas fa-trash'></i></a>
-                            </td>
-                        </tr>";
-                    $no++;
-                }
+                // $no = 1;
+                // foreach ($data_pedagang as $pedagang) {
+                //     echo "<tr>
+                //             <td>{$no}</td>
+                //             <td>{$pedagang['no_registrasi']}</td>
+                //             <td>{$pedagang['nik']}</td>
+                //             <td>{$pedagang['nama_pemilik']}</td>
+                //             <td>{$pedagang['kecamatan']}</td>
+                //             <td>{$pedagang['nama_kelurahan']}</td>
+                //             <td>{$pedagang['alamat_ktp']}</td>
+                //             <td>{$pedagang['alamat_usaha']}</td>
+                //             <td>{$pedagang['jenis_jualan']}</td>
+                //             <td>{$pedagang['jam_operasional']}</td>
+                //             <td>{$pedagang['no_hp']}</td>
+                //             <td><img src='uploads/{$pedagang['foto_ktp']}' alt='Foto KTP' width='50'></td>
+                //             <td><img src='uploads/{$pedagang['foto_nib']}' alt='Foto NIB' width='50'></td>
+                //             <td><img src='uploads/{$pedagang['foto_lapak']}' alt='Foto Lapak' width='50'></td>
+                //             <td>
+                //                 <a href='#' class='text-primary'><i class='fas fa-edit'></i></a>
+                //                 <a href='#' class='text-danger ml-2'><i class='fas fa-trash'></i></a>
+                //             </td>
+                //         </tr>";
+                //     $no++;
+                // }
                 ?>
             </tbody>
         </table>
@@ -131,4 +131,4 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> -->

@@ -59,31 +59,24 @@
 </head>
 <body>
     <div class="login-container">
-        <!-- Bagian Kiri dengan gambar aksesoris -->
         <div class="login-image">
-            <img src="putih.png" alt="Decorative Image">
+            <img src="gambar/putih.png" alt="Decorative Image">
         </div>
-        
-        <!-- Form Login di bagian Kanan -->
         <div class="login-form">
             <h3>Welcome</h3>
             <form action="proses_login.php" method="POST">
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required autofocus autocomplete="username">
                     <label for="username">Username</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required autocomplete="current-password">
                     <label for="password">Password</label>
                 </div>
                 <button type="submit" class="btn btn-login">Login</button>
             </form>
-            <!-- <div class="mt-3 text-center">
-                <a href="#">Forgot Password?</a> | <a href="#">Help</a>
-            </div> -->
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

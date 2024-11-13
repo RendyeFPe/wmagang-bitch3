@@ -2,34 +2,46 @@
 session_start();
 
 // Koneksi ke database
-$koneksi = new mysqli('localhost', 'root', '', 'db_pedagang');
+$conn = new mysqli('localhost', 'root', '', 'data_harga_pokok');
 
-if ($koneksi->connect_error) {
-    die("Koneksi gagal: " . $koneksi->connect_error);
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
 }
 
 // Ambil data dari form login
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-// Cek apakah username ada di database
-$sql = "SELECT * FROM users WHERE username = '$username'";
-$result = $koneksi->query($sql);
+// Gunakan prepared statement untuk keamanan
+$stmt = $conn->prepare("SELECT * FROM login_pkl WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
-    
-    // Verifikasi password
-    if (password_verify($password, $user['password'])) {
-        // Set session
-        $_SESSION['username'] = $username;
-        header("Location: dashboard.php");  // Arahkan ke halaman dashboard setelah login
+    // Ambil hasil query dan simpan di variabel baru
+    $userData = $result->fetch_assoc();
+
+    // Cek apakah password cocok dengan hash di database
+    if (password_verify($password, $userData['password'])) {
+        // Set session untuk username dan peran pengguna
+        $_SESSION['username'] = $userData['username'];
+        $_SESSION['role'] = $userData['role'];  // Pastikan ada kolom 'role' di tabel login_pkl
+
+        // Arahkan berdasarkan role
+        if ($userData['role'] == 'admin') {
+            header("Location: index.php"); // Halaman admin
+        } else {
+            header("Location: input_pedagang.php"); // Halaman user
+        }
+        exit();
     } else {
-        echo "Password salah.";
+        echo "<script>alert('Password salah.'); window.location.href = 'login.php';</script>";
     }
 } else {
-    echo "Username tidak ditemukan.";
+    echo "<script>alert('Username tidak ditemukan.'); window.location.href = 'login.php';</script>";
 }
 
+$stmt->close();
 $conn->close();
 ?>

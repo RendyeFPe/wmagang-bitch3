@@ -1,6 +1,6 @@
 <?php
 // Koneksi ke database
-$conn = new mysqli("localhost", "root", "", "db_pedagang");
+$conn = new mysqli('localhost', 'root', '', 'data_harga_pokok');
 
 if ($conn->connect_error) {
     die("Koneksi gagal: " . $conn->connect_error);
@@ -8,35 +8,33 @@ if ($conn->connect_error) {
 
 // Ambil data dari form registrasi
 $username = $_POST['username'];
-$email = $_POST['email'];
 $password = $_POST['password'];
-$confirm_password = $_POST['confirm_password'];
+$role = $_POST['role'];
 
-// Validasi password
-if ($password != $confirm_password) {
-    die("Password tidak cocok. Silakan coba lagi.");
-}
-
-// Hash password
-$hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-// Cek apakah username atau email sudah digunakan
-$sql_check = "SELECT * FROM users WHERE username = '$username' OR email = '$email'";
-$result = $conn->query($sql_check);
+// Cek apakah username sudah ada
+$stmt = $conn->prepare("SELECT * FROM login_pkl WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-    die("Username atau email sudah digunakan. Silakan pilih yang lain.");
+    echo "<script>alert('Username sudah terdaftar.'); window.location.href = 'register.php';</script>";
+    exit();
 }
 
-// Insert akun baru ke database
-$sql = "INSERT INTO users (username, password, email) VALUES ('$username', '$hashed_password', '$email')";
+// Hash password sebelum disimpan ke database
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-if ($conn->query($sql) === TRUE) {
-    echo "Akun berhasil dibuat! Silakan login.";
-    header("Location: login.php");
+// Simpan data ke database
+$stmt = $conn->prepare("INSERT INTO login_pkl (username, password, role) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $username, $hashed_password, $role);
+
+if ($stmt->execute()) {
+    echo "<script>alert('Registrasi berhasil. Silakan login.'); window.location.href = 'login.php';</script>";
 } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "<script>alert('Registrasi gagal. Silakan coba lagi.'); window.location.href = 'register.php';</script>";
 }
 
+$stmt->close();
 $conn->close();
 ?>
