@@ -40,7 +40,7 @@
         }
 
         .logo img {
-            width: 75%;
+            width: 100%;
             margin-bottom: 0px;
         }
 
@@ -147,19 +147,19 @@
         
         <!-- Menu Items -->
         <div class="menu">
-            <a href="#" class="menu-item">
+            <a href="index.php" class="menu-item">
                 <img src="gambar/dashboard.png" alt="Dashboard Icon">
                 <span>Dashboard</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="validasi_data.php" class="menu-item">
                 <img src="gambar/validasi.png" alt="Validasi Data Icon">
                 <span>Validasi Data</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="ambil_koordinat.php" class="menu-item">
                 <img src="gambar/pin.png" alt="Maps Icon">
                 <span>Maps</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="register.php" class="menu-item">
                 <img src="gambar/user.png" alt="Users Icon">
                 <span>Users</span>
             </a>
@@ -167,10 +167,12 @@
     </div>
 
     <!-- Main Content Area -->
-    <div class="content">
-        <h2>Dashboard</h2>
-        <!-- Tempat untuk konten utama dashboard -->
-    </div>
+   
+<?php
+// Tutup koneksi
+// mysqli_close($koneksi);
+?>
+
 
 </body>
 </html>

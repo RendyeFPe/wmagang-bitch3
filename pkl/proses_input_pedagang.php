@@ -1,10 +1,12 @@
 <?php
-include 'koneksi.php';
+include 'include/header.php';
+include 'include/koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $no_registrasi = isset($_POST['no_registrasi']) ? $_POST['no_registrasi'] : '';
     $nik = isset($_POST['nik']) ? $_POST['nik'] : '';
     $nama_pemilik = $_POST["nama_pemilik"];
+    $nama_usaha = $_POST["nama_usaha"];
     $kecamatan = isset($_POST['kecamatan']) ? $_POST['kecamatan'] : '';
     $nama_kelurahan = isset($_POST['nama_kelurahan']) ? $_POST['nama_kelurahan'] : '';
     $alamat_ktp = $_POST["alamat_ktp"];
@@ -34,12 +36,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!move_uploaded_file($_FILES['foto_lapak']['tmp_name'], $target_dir . $foto_lapak)) {
         echo "Gagal mengupload foto lapak";
     }
-    
-    $sql = "INSERT INTO pedagang (no_registrasi, nik, nama_pemilik, kecamatan, nama_kelurahan, alamat_ktp, alamat_usaha, deskripsi_alamat, jenis_jualan, jam_operasional, no_hp, latitude, longitude, foto_ktp, foto_nib, foto_lapak)
-            VALUES ('$no_registrasi','$nik','$nama_pemilik', '$kecamatan','$nama_kelurahan', '$alamat_ktp', '$alamat_usaha', '$deskripsi_alamat', '$jenis_jualan', '$jam_operasional', '$no_hp', '$latitude', '$longitude', '$foto_ktp', '$foto_nib', '$foto_lapak')";
+  
+    $sql = "INSERT INTO pedagang (no_registrasi, nik, nama_pemilik, nama_usaha, kecamatan, nama_kelurahan, alamat_ktp, alamat_usaha, deskripsi_alamat, jenis_jualan, jam_operasional, no_hp, latitude, longitude, foto_ktp, foto_nib, foto_lapak)
+            VALUES ('$no_registrasi','$nik','$nama_pemilik', '$nama_usaha', '$kecamatan','$nama_kelurahan', '$alamat_ktp', '$alamat_usaha', '$deskripsi_alamat', '$jenis_jualan', '$jam_operasional', '$no_hp', '$latitude', '$longitude', '$foto_ktp', '$foto_nib', '$foto_lapak')";
 
 if (mysqli_query($conn, $sql)) {
-    header("Location: dashboard.php");
+    header("Location: input_pedagang.php");
     exit;
 } else {
     echo "Error: " . $sql . "<br>" . mysqli_error($conn);
