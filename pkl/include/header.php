@@ -1,6 +1,8 @@
 <?php include "include/mainPageFunctions.php"?>
-<?php include "include/koneksi.php"; ?>
-<?php session_start(); ?>
+<?php include "include/koneksi.php" ?>
+<?php 
+// session_start();
+ ?>
 
 <!DOCTYPE html>
 <html lang="en">
