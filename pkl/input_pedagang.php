@@ -61,6 +61,10 @@
                     <input type="text" class="form-control" name="nama_pemilik" required>
                 </div>
                 <div class="form-group">
+                    <label for="nama_usaha">Nama Usaha</label>
+                    <input type="text" class="form-control" name="nama_usaha" required>
+                </div>
+                <div class="form-group">
                     <label for="kecamatan">Kecamatan</label>
                     <input type="text" class="form-control" name="kecamatan" required>
                 </div>
