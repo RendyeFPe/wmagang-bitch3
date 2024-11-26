@@ -1,162 +1,292 @@
-<?php
-include 'include/header.php';
-include 'include/sidebar.php';
-// include 'include/koneksi.php'; // Pastikan ini adalah koneksi ke database Anda
-
-// Query untuk mengambil data pedagang yang belum divalidasi
-$sql = "SELECT * FROM pedagang WHERE status_validasi = 'pending'";
-$result = mysqli_query($conn, $sql);
-
-?>
-
+<?php include "include/header.php"; ?>
+<?php include "include/sidebar.php"; ?>
+<?php include "include/koneksi.php"; ?>
 <!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validasi Data Pedagang</title>
-    <style>
-        /* Styling untuk halaman validasi */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f9;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        .table-container {
-    overflow-x: auto;
-    margin: 20px auto;
-    width: 100%;
-    max-width: 1000px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    <html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+/* Reset umum */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+/* Wrapper utama */
+.content-wrapper {
+    margin-left: 200px; /* Sesuaikan dengan lebar sidebar */
     padding: 20px;
+    background: #f8f9fc;
+    min-height: 100vh;
+    transition: margin-left 0.3s; /* Efek transisi */
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
+/* Konten utama */
+.content {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-table, th, td {
-    border: 1px solid #ddd;
-}
-
-th {
-    background-color: #006d77;
-    color: white;
-    font-weight: bold;
+/* Heading */
+h2 {
+    font-size: 24px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
     text-align: center;
 }
 
-th, td {
-    padding: 12px;
+/* Kartu (card) */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: #ffffff;
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 60%; /* Kurangi lebar kartu agar tidak terlalu besar */
+    margin-left: 280px;
 }
 
-tr:nth-child(even) {
-    background-color: #f9f9f9;
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Gaya khusus untuk gambar agar lebih kecil */
-.table img {
-    width: 50px;  /* Atur ukuran lebar gambar */
-    height: auto;
-    border-radius: 4px;
-    object-fit: cover;  /* Menjaga proporsi gambar */
+.card-header {
+    background-color: #007bff;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px; /* Kurangi padding agar lebih kecil */
+    border-radius: 10px 10px 0 0;
+    text-align: center;
 }
 
-/* Responsive layout */
-@media (max-width: 768px) {
-    th, td {
-        font-size: 12px;
-        padding: 8px;
+.card-body {
+    padding: 15px; /* Sesuaikan padding internal */
+    text-align: center;
+}
+
+/* Kanvas untuk chart */
+canvas {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* Grid responsif */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Tambahkan jarak antar elemen */
+    justify-content: center; /* Tengah elemen jika ruang kosong */
+}
+
+.col-md-6 {
+    flex: 1 1 calc(45% - 10px); /* Kurangi ukuran kolom */
+}
+
+@media (max-width: 767px) {
+    .content-wrapper {
+        margin-left: 0;
     }
-    h2 {
-        font-size: 18px;
+
+    .col-md-6 {
+        flex: 1 1 100%;
     }
 }
 
-@media (max-width: 480px) {
-    h2 {
-        font-size: 16px;
-    }
-    .table-container {
-        padding: 10px;
-    }
-    th, td {
-        font-size: 10px;
-        padding: 5px;
-    }
+/* Efek Hover pada Heading Card */
+.card-header:hover {
+    background-color: #0056b3;
 }
+</style>
 
-        .action-btn {
-            padding: 6px 12px;
-            font-size: 14px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .validate-btn {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .reject-btn {
-            background-color: #f44336;
-            color: white;
-        }
-    </style>
-</head>
-<body>
-<div class="table-container">
-    <h2>Validasi Data Pedagang</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>No Registrasi</th>
-                <th>NIK</th>
-                <th>Nama Pemilik</th>
-                <th>Alamat Usaha</th>
-                <th>Jenis Jualan</th>
-                <th>No HP</th>
-                <th>Foto KTP</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $row['no_registrasi'] . "</td>";
-                    echo "<td>" . $row['nik'] . "</td>";
-                    echo "<td>" . $row['nama_pemilik'] . "</td>";
-                    echo "<td>" . $row['alamat_usaha'] . "</td>";
-                    echo "<td>" . $row['jenis_jualan'] . "</td>";
-                    echo "<td>" . $row['no_hp'] . "</td>";
-                    echo "<td><img src='uploads/" . $row['foto_ktp'] . "' alt='Foto KTP'></td>";
-                    echo "<td>
-                            <form action='proses_validasi.php' method='POST'>
-                                <input type='hidden' name='id_pedagang' value='" . $row['id'] . "'>
-                                <button type='submit' name='action' value='validate' class='action-btn validate-btn'>Validasi</button>
-                                <button type='submit' name='action' value='reject' class='action-btn reject-btn'>Tolak</button>
-                            </form>
-                          </td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='8'>Tidak ada data yang perlu divalidasi</td></tr>";
-            }
-            ?>
-        </tbody>
-    </table>
+<div class="content">
+    <h2>Statistik Usaha</h2>
+
+    <!-- Chart Containers -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Klasifikasi Usaha</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartKlasifikasi"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Top 10 Unit Usaha</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartUnitUsaha"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Tenaga Kerja</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartTenagaKerja"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Nilai Investasi</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartNilaiInvestasi"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
 
-<?php mysqli_close($conn); ?>
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Fetch data from PHP (replace with actual queries)
+    <?php
+    // Query for Klasifikasi Usaha data
+    $queryKlasifikasi = "SELECT jenis_jualan, COUNT(*) AS jumlah FROM pedagang GROUP BY jenis_jualan";
+    $resultKlasifikasi = mysqli_query($conn, $queryKlasifikasi);
+    $klasifikasiData = [];
+    while ($row = mysqli_fetch_assoc($resultKlasifikasi)) {
+        $klasifikasiData[] = $row;
+    }
+
+    // Query for Unit Usaha data
+    $queryUnitUsaha = "SELECT jenis_jualan, COUNT(*) AS jumlah FROM pedagang GROUP BY jenis_jualan ORDER BY jumlah DESC LIMIT 10";
+    $resultUnitUsaha = mysqli_query($conn, $queryUnitUsaha);
+    $unitUsahaData = [];
+    while ($row = mysqli_fetch_assoc($resultUnitUsaha)) {
+        $unitUsahaData[] = $row;
+    }
+
+    // Convert PHP data to JavaScript
+    echo "const klasifikasiData = " . json_encode($klasifikasiData) . ";\n";
+    echo "const unitUsahaData = " . json_encode($unitUsahaData) . ";\n";
+    ?>
+
+    // Chart for Klasifikasi Usaha
+    const ctxKlasifikasi = document.getElementById('chartKlasifikasi').getContext('2d');
+    new Chart(ctxKlasifikasi, {
+        type: 'pie',
+        data: {
+            labels: klasifikasiData.map(data => data.jenis_jualan),
+            datasets: [{
+                label: 'Jumlah',
+                data: klasifikasiData.map(data => data.jumlah),
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#FF9F40'],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    enabled: true,
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Chart for Top 10 Unit Usaha
+    const ctxUnitUsaha = document.getElementById('chartUnitUsaha').getContext('2d');
+    new Chart(ctxUnitUsaha, {
+        type: 'bar',
+        data: {
+            labels: unitUsahaData.map(data => data.jenis_jualan),
+            datasets: [{
+                label: 'Jumlah Unit',
+                data: unitUsahaData.map(data => data.jumlah),
+                backgroundColor: '#36A2EB',
+                borderColor: '#4B8BEB',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 5
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+
+    // Chart for Tenaga Kerja (Placeholder)
+    const ctxTenagaKerja = document.getElementById('chartTenagaKerja').getContext('2d');
+    new Chart(ctxTenagaKerja, {
+        type: 'line', // Just an example type
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            datasets: [{
+                label: 'Tenaga Kerja',
+                data: [30, 50, 70, 40, 60],
+                borderColor: '#FF5733',
+                backgroundColor: 'rgba(255, 87, 51, 0.2)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+
+    // Chart for Nilai Investasi (Placeholder)
+    const ctxNilaiInvestasi = document.getElementById('chartNilaiInvestasi').getContext('2d');
+    new Chart(ctxNilaiInvestasi, {
+        type: 'radar', // Just an example type
+        data: {
+            labels: ['Investasi 1', 'Investasi 2', 'Investasi 3'],
+            datasets: [{
+                label: 'Nilai Investasi',
+                data: [65, 59, 90],
+                borderColor: '#4BC0C0',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            scale: {
+                ticks: { beginAtZero: true }
+            }
+        }
+    });
+</script>
