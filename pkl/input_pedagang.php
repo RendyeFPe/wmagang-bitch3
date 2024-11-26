@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         body {
-            background-image: url('gambar/walpaper5.jpg');
-            background-size: cover;
+            /* background-image: url('gambar/walpaper5.jpg'); */
+            background-size: auto;
             background-position: center;
             background-repeat: no-repeat;
             height: 100vh;
+            background-color: #5BB5BA;
         }
         .form-container {
             background-color: rgba(255, 255, 255, 1);

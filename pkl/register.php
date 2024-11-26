@@ -107,7 +107,7 @@ include 'include/sidebar.php';
             <div class="mb-3">
                 <label for="role" class="form-label">Role</label>
                 <select class="form-control" id="role" name="role" required>
-                    <option value="user">User</option>
+                    <option value="user">Survey</option>
                     <option value="admin">Admin</option>
                 </select>
             </div>

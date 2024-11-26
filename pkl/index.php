@@ -71,6 +71,20 @@
         #searchButton:hover {
             background-color: #005a63;
         }
+        .export-btn {
+            padding: 10px 20px;
+            background-color: #198754;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .export-btn:hover {
+            background-color: #157347;
+        }
         .table-container {
             overflow-x: auto;
             margin: 20px;
@@ -167,9 +181,10 @@
     </head>
     <body>
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Cari data pedagang...">
-        <button id="searchButton">Enter</button>
-    </div>
+    <input type="text" id="searchInput" placeholder="Cari data pedagang...">
+    <button id="searchButton">Enter</button>
+    <a href="export_excel.php" class="export-btn">Download</a>
+</div>
     <div class="table-container">
         <table>
             <thead>
