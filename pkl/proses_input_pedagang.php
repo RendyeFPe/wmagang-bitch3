@@ -1,5 +1,5 @@
 <?php
-include 'include/header.php';
+// include 'include/header.php';
 include 'include/koneksi.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -18,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $latitude = $_POST['latitude'];
     $longitude = $_POST['longitude'];
 
-    if (empty($nik) || !is_numeric($nik) || strlen($nik) != 16) {
-        die("NIK harus terdiri dari 16 digit angka.");
+    if (!empty($nik) || !is_numeric($nik) || strlen($nik) != 16) {
+        die("NIK harus terdiri dari 16 digit angka atau ketik 0.");
     }
 
     $foto_ktp = $_FILES['foto_ktp']['name'];

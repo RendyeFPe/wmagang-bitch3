@@ -1,3 +1,8 @@
+<?php
+include "include/header.php"; 
+include "include/sidebar2.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,12 +36,10 @@
         }
         .btn-primary {
             width: 100%;
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: #006d77;
         }
         .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
+            background-color: #005a63;
         }
         #mapid {
             height: 400px;
