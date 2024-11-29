@@ -35,6 +35,7 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            z-index: 1000;
         }
         /* Logo styling */
         .logo {
@@ -143,9 +144,9 @@
                 <img src="gambar/dashboard.png" alt="Dashboard Icon">
                 <span>Dashboard</span>
             </a>
-            <a href="validasi_data.php" class="menu-item">
+            <a href="statistik.php" class="menu-item">
                 <img src="gambar/validasi.png" alt="Validasi Data Icon">
-                <span>Validasi Data</span>
+                <span>Statistik</span>
             </a>
             <a href="peta.php" class="menu-item">
                 <img src="gambar/pin.png" alt="Maps Icon">

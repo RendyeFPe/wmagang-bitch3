@@ -1,24 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Login</title>
+    <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
             background-color: #E8F5F9;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
         .login-container {
-            width: 900px;
-            background-color: white;
+            background-color: #ffffff;
             border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             display: flex;
+            max-width: 900px;
+            width: 100%;
+            margin: 20px;
         }
         .login-image {
             background-color: #4DB6AC;
@@ -27,16 +33,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex: 1;
             padding: 30px;
-            width: 50%;
         }
         .login-image img {
-            width: 200%;
-            max-width: 350px;
-            height: 350px;
+            max-width: 100%;
+            height: auto;
         }
         .login-form {
-            width: 50%;
+            flex: 1;
             padding: 40px;
         }
         .login-form h3 {
@@ -48,12 +53,17 @@
             background-color: #4DB6AC;
             color: white;
             width: 100%;
+            border-radius: 8px;
         }
         .btn-login:hover {
             background-color: #3AA09A;
         }
         .form-floating label {
             color: #4DB6AC;
+        }
+        .form-control:focus {
+            border-color: #4DB6AC;
+            box-shadow: 0 0 0 0.2rem rgba(77, 182, 172, 0.25);
         }
     </style>
 </head>
@@ -63,7 +73,7 @@
             <img src="gambar/putih.png" alt="Decorative Image">
         </div>
         <div class="login-form">
-            <h3>Welcome</h3>
+            <h3>Selamat Datang</h3>
             <form action="proses_login.php" method="POST">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="username" name="username" placeholder="Username" required autofocus autocomplete="username">

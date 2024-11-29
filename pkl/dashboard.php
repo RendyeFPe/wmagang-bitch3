@@ -182,10 +182,10 @@
     </head>
     <body>
     <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Cari data pedagang...">
-    <button id="searchButton">Enter</button>
-    <a href="export_excel.php" class="export-btn">Download</a>
-</div>
+        <input type="text" id="searchInput" placeholder="Cari data pedagang...">
+        <button id="searchButton">Enter</button>
+        <a href="export_excel.php" class="export-btn">Download</a>
+    </div>
     <div class="table-container">
         <table>
             <thead>
@@ -215,30 +215,31 @@
                 if (mysqli_num_rows($result) > 0) {
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['no_registrasi']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['nik']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['nama_pemilik']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['nama_usaha']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['kecamatan']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['nama_kelurahan']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['alamat_ktp']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['alamat_usaha']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['deskripsi_alamat']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['jenis_jualan']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['jam_operasional']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['no_hp']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['latitude']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['longitude']) . "</td>";
-                        echo "<td><img src='uploads/" . htmlspecialchars($row['foto_ktp']) . "' alt='Foto KTP' class='foto'></td>";
-                        echo "<td><img src='uploads/" . htmlspecialchars($row['foto_nib']) . "' alt='Foto NIB' class='foto'></td>";
-                        echo "<td><img src='uploads/" . htmlspecialchars($row['foto_lapak']) . "' alt='Foto Lapak' class='foto'></td>";
+                        echo "<td>" . (!empty($row['no_registrasi']) ? htmlspecialchars($row['no_registrasi']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['nik']) && $row['nik'] != '0' ? htmlspecialchars($row['nik']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['nama_pemilik']) ? htmlspecialchars($row['nama_pemilik']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['nama_usaha']) ? htmlspecialchars($row['nama_usaha']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['kecamatan']) ? htmlspecialchars($row['kecamatan']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['nama_kelurahan']) ? htmlspecialchars($row['nama_kelurahan']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['alamat_ktp']) ? htmlspecialchars($row['alamat_ktp']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['alamat_usaha']) ? htmlspecialchars($row['alamat_usaha']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['deskripsi_alamat']) ? htmlspecialchars($row['deskripsi_alamat']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['jenis_jualan']) ? htmlspecialchars($row['jenis_jualan']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['jam_operasional']) ? htmlspecialchars($row['jam_operasional']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['no_hp']) ? htmlspecialchars($row['no_hp']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['latitude']) ? htmlspecialchars($row['latitude']) : "Tidak Ada Data") . "</td>";
+                        echo "<td>" . (!empty($row['longitude']) ? htmlspecialchars($row['longitude']) : "Tidak Ada Data") . "</td>";
+                        echo "<td><img src='uploads/" . (!empty($row['foto_ktp']) ? htmlspecialchars($row['foto_ktp']) : "placeholder.png") . "' alt='Foto KTP' class='foto'></td>";
+                        echo "<td><img src='uploads/" . (!empty($row['foto_nib']) ? htmlspecialchars($row['foto_nib']) : "placeholder.png") . "' alt='Foto NIB' class='foto'></td>";
+                        echo "<td><img src='uploads/" . (!empty($row['foto_lapak']) ? htmlspecialchars($row['foto_lapak']) : "placeholder.png") . "' alt='Foto Lapak' class='foto'></td>";
                         echo "<td>
-                        <a href='edit_pedagang.php?id=" . $row['id'] . "' class='edit-btn'>Edit</a>
-                      </td>";
+                                <a href='edit_pedagang.php?id=" . $row['id'] . "' class='edit-btn'>Edit</a>
+                                <a href='hapus_pedagang.php?id=" . $row['id'] . "' class='edit-btn' style='background-color: red;'>Hapus</a>
+                              </td>";
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='16'>Tidak ada data yang divalidasi</td></tr>";
+                    echo "<tr><td colspan='18'>Tidak ada data yang tersedia</td></tr>";
                 }
                 ?>
             </tbody>
@@ -247,38 +248,29 @@
     <script>
         // Fungsi pencarian
         function searchTable() {
-            const input = document.getElementById('searchInput').value.toLowerCase(); // Ambil nilai input
-            const rows = document.querySelectorAll('table tbody tr'); // Semua baris tabel
-            
-            // Filter baris berdasarkan input
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('table tbody tr');
             rows.forEach(row => {
                 const isVisible = Array.from(row.children).some(td =>
                     td.textContent.toLowerCase().includes(input)
                 );
-                row.style.display = isVisible ? '' : 'none'; // Sembunyikan baris jika tidak cocok
+                row.style.display = isVisible ? '' : 'none';
             });
         }
 
-        // Event listener untuk tombol Enter
         const searchButton = document.getElementById('searchButton');
-        searchButton.addEventListener('click', searchTable); // Panggil fungsi searchTable saat tombol diklik
+        searchButton.addEventListener('click', searchTable);
 
-        // Optional: Tambahkan event "Enter" langsung di kolom input
         const searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
-                searchTable(); // Panggil fungsi searchTable saat Enter ditekan
-                event.preventDefault(); // Hindari aksi default tombol Enter
+                searchTable();
+                event.preventDefault();
             }
         });
     </script>
-
-</body>
-</html>
-
     </body>
-    </html>
-
+</html>
     <?php
     // Tutup koneksi
     mysqli_close($conn);

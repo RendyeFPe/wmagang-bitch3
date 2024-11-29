@@ -120,8 +120,8 @@ include 'include/sidebar.php';
 
         // Custom marker icon
         var customIcon = L.icon({
-            iconUrl: 'gambar/marker-icon.png',
-            iconSize: [32, 32],
+            iconUrl: 'gambar/pun.png',
+            iconSize: [50, 50],
             iconAnchor: [16, 32],
             popupAnchor: [0, -32]
         });
