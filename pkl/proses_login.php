@@ -30,7 +30,7 @@ if ($result->num_rows > 0) {
 
         // Arahkan berdasarkan role
         if ($userData['role'] == 'admin') {
-            header("Location: index.php"); // Halaman admin
+            header("Location: dashboard.php"); // Halaman admin
         } else {
             header("Location: input_pedagang.php"); // Halaman user
         }

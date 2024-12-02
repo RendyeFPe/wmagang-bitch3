@@ -131,22 +131,24 @@
             <img src="gambar/pkl.png" alt="Ikon PKL" class="ikon-pkl"> </div>
             <div class="text">
             <h1>Pendataan PKL</h1>
-            <p>Kota Kediri<br>Admin Panel</p>
+            <p>Kota Kediri<br>Surveyor</p>
         </div>
         
         <!-- Logout Button -->
-        <a href="login.php" button class="logout-btn"> Logout</a>
+        <a href="index.php" button class="logout-btn"> Logout</a>
         
         <!-- Menu Items -->
         <div class="menu">
-            <a href="index.php" class="menu-item">
+            <a href="dashboard.php" class="menu-item">
                 <img src="gambar/dashboard.png" alt="Dashboard Icon">
                 <span>Dashboard</span>
             </a>
-            <a href="validasi_data.php" class="menu-item">
+            <a href="input_pedagang.php" class="menu-item">
                 <img src="gambar/validasi.png" alt="Validasi Data Icon">
-                <span>Validasi Data</span>
+                <span>Input Data</span>
             </a>
+    
+     
         </div>
     </div>
 
