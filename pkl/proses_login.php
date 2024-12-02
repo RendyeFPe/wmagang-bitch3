@@ -39,7 +39,7 @@ if ($result->num_rows > 0) {
         echo "<script>alert('Password salah.'); window.location.href = 'login.php';</script>";
     }
 } else {
-    echo "<script>alert('Username tidak ditemukan.'); window.location.href = 'login.php';</script>";
+    echo "<script>alert('Username tidak ditemukan.'); window.location.href = 'index.php';</script>";
 }
 
 $stmt->close();
