@@ -1,9 +1,21 @@
+<?php
+session_start();
+
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION['username']) || $_SESSION['role'] != 'user') {
+    header('Location: index.php');
+    exit;
+}
+// Lanjutkan dengan konten halaman
+// echo "Selamat datang, " . $_SESSION['username'] . "!";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel Disperdagin</title>
+    <title>Survey Panel Disperdagin</title>
     <style>
         /* CSS Reset */
         * {
@@ -131,30 +143,24 @@
             <img src="gambar/pkl.png" alt="Ikon PKL" class="ikon-pkl"> </div>
             <div class="text">
             <h1>Pendataan PKL</h1>
-            <p>Kota Kediri<br>Admin Panel</p>
+            <p>Kota Kediri<br>Survey Panel</p>
         </div>
         
         <!-- Logout Button -->
-        <a href="index.php" button class="logout-btn"> Logout</a>
+        <a href="logout.php" button class="logout-btn"> Logout</a>
         
         <!-- Menu Items -->
         <div class="menu">
-            <a href="dashboard.php" class="menu-item">
+            <a href="dashboard_survey.php" class="menu-item">
                 <img src="gambar/dashboard.png" alt="Dashboard Icon">
                 <span>Dashboard</span>
             </a>
-            <a href="validasi_data.php" class="menu-item">
+            <a href="input_pedagang.php" class="menu-item">
                 <img src="gambar/validasi.png" alt="Validasi Data Icon">
-                <span>Validasi Data</span>
+                <span>Input Data</span>
             </a>
-            <a href="peta.php" class="menu-item">
-                <img src="gambar/pin.png" alt="Maps Icon">
-                <span>Maps</span>
-            </a>
-            <a href="register.php" class="menu-item">
-                <img src="gambar/user.png" alt="Users Icon">
-                <span>Users</span>
-            </a>
+    
+     
         </div>
     </div>
 

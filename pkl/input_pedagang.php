@@ -94,6 +94,14 @@ include "include/sidebar2.php";
     </style>
 </head>
 <body>
+<?php
+// Definisikan data kecamatan dan kelurahan
+$data = [
+    "Mojoroto" => ["Mojoroto", "Campurejo", "Banjarmlati", "Tamanan", "Mrican", "Bandar Kidul"],
+    "Kota" => ["Kampundalem", "Ngampel", "Dandangan", "Banjaran", "Pakunden", "Balowerti", "Setono Gedong", "Dermo"],
+    "Pesantren" => ["Bangsal", "Ngletih", "Ketami", "Lirboyo", "Betet", "Ngadirejo", "Ngronggo", "Tinalan"]
+];
+?>
     <div class="container">
         <h2>Formulir Input Data Pedagang</h2>
         <form action="proses_input_pedagang.php" method="POST" enctype="multipart/form-data">
@@ -101,11 +109,11 @@ include "include/sidebar2.php";
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label for="no_registrasi">Nomor Registrasi</label>
-                        <input type="text" class="form-control" name="no_registrasi" required>
+                        <input type="text" class="form-control" name="no_registrasi" >
                     </div>
                     <div class="form-group mb-3">
                         <label for="nik">NIK KTP</label>
-                        <input type="number" class="form-control" name="nik" required>
+                        <input type="number" class="form-control" name="nik">
                     </div>
                     <div class="form-group mb-3">
                         <label for="nama_pemilik">Nama Pemilik</label>
@@ -117,17 +125,22 @@ include "include/sidebar2.php";
                     </div>
                     <div class="form-group mb-3">
                         <label for="kecamatan">Kecamatan</label>
-                        <input type="text" class="form-control" name="kecamatan" required>
+                        <select class="form-control" name="kecamatan" id="kecamatan" required>
+                        <option value="">Pilih Kecamatan</option>
+                            <?php foreach ($data as $kecamatan => $kelurahan): ?>
+                                <option value="<?= $kecamatan ?>"><?= $kecamatan ?></option>
+                            <?php endforeach; ?>
                     </div>
                     <div class="form-group mb-3">
                         <label for="nama_kelurahan">Nama Kelurahan</label>
-                        <input type="text" class="form-control" name="nama_kelurahan" required>
+                        <select class="form-control" name="nama_kelurahan" id="kelurahan" required>
+                        <option value="">Pilih Kelurahan</option>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label for="alamat_ktp">Alamat KTP</label>
-                        <input type="text" class="form-control" name="alamat_ktp" required>
+                        <input type="text" class="form-control" name="alamat_ktp">
                     </div>
                     <div class="form-group mb-3">
                         <label for="alamat_usaha">Alamat Usaha</label>
@@ -170,11 +183,24 @@ include "include/sidebar2.php";
             </div>
 
             <div class="form-group file-input">
-                <label>Upload Dokumen:</label>
-                <input type="file" class="form-control" name="foto_ktp" required>
-                <input type="file" class="form-control" name="foto_nib" required>
-                <input type="file" class="form-control" name="foto_lapak" required>
-            </div>
+            <div class="mb-4">
+    <h5 class="mb-3">Upload Dokumen</h5>
+    <!-- Foto KTP -->
+    <div class="form-group mb-3">
+        <label for="foto_ktp">Foto KTP</label>
+        <input type="file" class="form-control" id="foto_ktp" name="foto_ktp">
+    </div>
+    <!-- Foto NIB -->
+    <div class="form-group mb-3">
+        <label for="foto_nib">Foto NIB</label>
+        <input type="file" class="form-control" id="foto_nib" name="foto_nib">
+    </div>
+    <!-- Foto Lapak -->
+    <div class="form-group mb-3">
+        <label for="foto_lapak">Foto Lapak</label>
+        <input type="file" class="form-control" id="foto_lapak" name="foto_lapak">
+    </div>
+</div>
 
             <button type="submit" class="btn btn-primary mt-4">Simpan Data</button>
         </form>
@@ -198,5 +224,30 @@ include "include/sidebar2.php";
         }
         map.on('click', onMapClick);
     </script>
+    <script>
+    // Definisikan array kecamatan dan kelurahan di JavaScript
+    const kecamatanData = <?= json_encode($data); ?>;
+    console.log(kecamatanData);
+    const kecamatanDropdown = document.getElementById('kecamatan');
+    const kelurahanDropdown = document.getElementById('kelurahan');
+
+    kecamatanDropdown.addEventListener('change', function () {
+        const selectedKecamatan = this.value;
+
+        // Hapus semua opsi di kelurahan
+        kelurahanDropdown.innerHTML = '<option value="">Pilih Kelurahan</option>';
+
+        // Jika ada kecamatan yang dipilih
+        if (selectedKecamatan && kecamatanData[selectedKecamatan]) {
+            kecamatanData[selectedKecamatan].forEach(function (kelurahan) {
+                const option = document.createElement('option');
+                option.value = kelurahan;
+                option.textContent = kelurahan;
+                kelurahanDropdown.appendChild(option);
+            });
+        }
+    });
+</script>
+
 </body>
 </html>
