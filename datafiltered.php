@@ -78,6 +78,7 @@
           (Select nama_barang, tanggal, harga_sekarang
           FROM data_barang_setonobetek)) AS merged_table
           WHERE nama_barang IN ($in_clause)
+          AND tanggal >= CURDATE() - INTERVAL 7 DAY
           GROUP BY nama_barang,tanggal;";
 
           // Execute the query
