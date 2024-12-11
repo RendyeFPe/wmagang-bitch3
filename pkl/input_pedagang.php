@@ -94,6 +94,7 @@ include "include/sidebar2.php";
     </style>
 </head>
 <body>
+
 <?php
 // Definisikan data kecamatan dan kelurahan
 $data = [
@@ -130,11 +131,13 @@ $data = [
                             <?php foreach ($data as $kecamatan => $kelurahan): ?>
                                 <option value="<?= $kecamatan ?>"><?= $kecamatan ?></option>
                             <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="form-group mb-3">
                         <label for="nama_kelurahan">Nama Kelurahan</label>
                         <select class="form-control" name="nama_kelurahan" id="kelurahan" required>
                         <option value="">Pilih Kelurahan</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">

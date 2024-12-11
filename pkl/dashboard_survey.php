@@ -233,7 +233,7 @@
                         echo "<td><img src='uploads/" . (!empty($row['foto_nib']) ? htmlspecialchars($row['foto_nib']) : "placeholder.png") . "' alt='Foto NIB' class='foto'></td>";
                         echo "<td><img src='uploads/" . (!empty($row['foto_lapak']) ? htmlspecialchars($row['foto_lapak']) : "placeholder.png") . "' alt='Foto Lapak' class='foto'></td>";
                         echo "<td>
-                                <a href='edit_pedagang.php?id=" . $row['id'] . "' class='edit-btn'>Edit</a>
+                                <a href='edit_pedagang_survey.php?id=" . $row['id'] . "' class='edit-btn'>Edit</a>
                                 <a href='hapus_pedagang.php?id=" . $row['id'] . "' class='edit-btn' style='background-color: red;'>Hapus</a>
                               </td>";
                         echo "</tr>";

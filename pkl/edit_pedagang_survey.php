@@ -5,7 +5,7 @@ include "include/header.php";
 session_start();
 
 // Periksa apakah pengguna sudah login
-if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
+if (!isset($_SESSION['username']) || $_SESSION['role'] != 'user') {
     header('Location: index.php');
     exit;
 }
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                    WHERE id = $id";
 
     if (mysqli_query($conn, $update_sql)) {
-        echo "<div class='alert alert-success'>Data berhasil diperbarui! <a href='dashboard.php'>Kembali</a></div>";
+        echo "<div class='alert alert-success'>Data berhasil diperbarui! <a href='dashboard_survey.php'>Kembali</a></div>";
     } else {
         echo "<div class='alert alert-danger'>Error: " . mysqli_error($conn) . "</div>";
     }
@@ -192,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <!-- Tombol -->
             <div class="d-flex justify-content-between">
-                <a href="dashboard.php" class="btn btn-secondary">Kembali</a>
+                <a href="dashboard_survey.php" class="btn btn-secondary">Kembali</a>
                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
             </div>
         </form>
