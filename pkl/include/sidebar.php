@@ -47,6 +47,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
             padding: 20px;
             z-index: 1000;
         }
+
         /* Logo styling */
         .logo {
             display: flex;
@@ -89,11 +90,17 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
             background-color: #ffbb33;
             border: none;
             padding: 8px 20px;
-            color: #333;
+            color: #000000;
             font-weight: bold;
             border-radius: 5px;
             cursor: pointer;
             margin: 20px 0;
+            text-decoration: none;
+        }
+        .logout-btn:hover {
+        background-color: #ffa500; /* Warna latar saat di-hover */
+        color: #000000; /* Warna tetap hitam saat di-hover */
+        text-decoration: none;
         }
         /* Menu items styling */
         .menu {
@@ -111,7 +118,9 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
             transition: 0.2s;
         }
         .menu-item:hover {
+            color: #000000;
             background-color: #83c5be;
+            text-decoration: none;
             border-radius: 0 20px 20px 0;
         }
         .menu-item img {

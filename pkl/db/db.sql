@@ -14,22 +14,37 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Dumping structure for table data_harga_pokok.login_pkl
-CREATE TABLE IF NOT EXISTS `login_pkl` (
+-- Dumping structure for table data_harga_pokok.pedagang
+CREATE TABLE IF NOT EXISTS `pedagang` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) COLLATE armscii8_bin NOT NULL,
-  `password` varchar(255) COLLATE armscii8_bin NOT NULL,
-  `role` enum('admin','user') COLLATE armscii8_bin DEFAULT 'user',
+  `no_registrasi` varchar(20) COLLATE armscii8_bin DEFAULT NULL,
+  `nik` varchar(16) COLLATE armscii8_bin DEFAULT NULL,
+  `nama_pemilik` varchar(100) COLLATE armscii8_bin DEFAULT NULL,
+  `alamat_ktp` text COLLATE armscii8_bin,
+  `kecamatan` varchar(50) COLLATE armscii8_bin DEFAULT NULL,
+  `nama_kelurahan` varchar(50) COLLATE armscii8_bin DEFAULT NULL,
+  `alamat_usaha` text COLLATE armscii8_bin,
+  `deskripsi_alamat` text COLLATE armscii8_bin,
+  `jenis_jualan` varchar(50) COLLATE armscii8_bin DEFAULT NULL,
+  `jam_operasional` varchar(50) COLLATE armscii8_bin DEFAULT NULL,
+  `no_hp` varchar(15) COLLATE armscii8_bin DEFAULT NULL,
+  `latitude` decimal(10,8) DEFAULT NULL,
+  `longitude` decimal(11,8) DEFAULT NULL,
+  `foto_ktp` varchar(255) COLLATE armscii8_bin DEFAULT NULL,
+  `foto_nib` varchar(255) COLLATE armscii8_bin DEFAULT NULL,
+  `foto_lapak` varchar(255) COLLATE armscii8_bin DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=armscii8 COLLATE=armscii8_bin;
+  `status_validasi` enum('pending','true','false') COLLATE armscii8_bin DEFAULT 'true',
+  `nama_usaha` varchar(50) COLLATE armscii8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=armscii8 COLLATE=armscii8_bin;
 
--- Dumping data for table data_harga_pokok.login_pkl: ~3 rows (approximately)
-REPLACE INTO `login_pkl` (`id`, `username`, `password`, `role`, `created_at`) VALUES
-	(5, 'admin', '$2y$10$Ey0qdlBxl6W006fPhgWFiuKcpSSeBQ2ivJQq.JzPXO9rI7/t3YJWm', 'admin', '2024-11-12 06:59:44'),
-	(7, 'admin1', '$2y$10$xRuXCKjnsrZ4hHv3GKGrE.TYSnotLAR/TRHgq0zRMwRd068D.rsV.', 'user', '2024-11-26 02:32:23'),
-	(8, 'admin2', '$2y$10$ft2fxrF5qPC1hDHcFDE88OS52EhTECBiMGVTE0aiVxrvPYid0s5fa', 'admin', '2024-11-26 02:33:09');
+-- Dumping data for table data_harga_pokok.pedagang: ~5 rows (approximately)
+REPLACE INTO `pedagang` (`id`, `no_registrasi`, `nik`, `nama_pemilik`, `alamat_ktp`, `kecamatan`, `nama_kelurahan`, `alamat_usaha`, `deskripsi_alamat`, `jenis_jualan`, `jam_operasional`, `no_hp`, `latitude`, `longitude`, `foto_ktp`, `foto_nib`, `foto_lapak`, `created_at`, `status_validasi`, `nama_usaha`) VALUES
+	(1, 'hdgcds', '4455332155112552', 'adi', 'jjjjj', 'mojoroto', 'mojoroto', 'jjjj', 'jl. veteran ', 'pentol', '19.00-20.00', '082255994448', -7.89995222, 10.88559889, '20230927_081530.png', 'telur.jpg', 'tata-laksana.webp', '2024-11-10 09:04:21', 'true', 'pentol bakar'),
+	(2, '0588589564825978', '8945588958148599', 'jaya', 'ssssssshuhiuhjn', 'mojoroto', 'mojoroto', 'ndbchdsbgy', 'jdbjhddhhjdbc', 'makanan', '18.00-20.00 wib', '05584984', -7.80256846, 112.00080830, 'beras.png', 'daging.jpg', 'flow_minhol.png', '2024-11-15 02:19:24', 'true', 'seblak goreng'),
+	(4, '55566699a9s99', '', 'cahyadi', 'kono adoh', 'mojoroto', 'jomokerto', 'sepanjang jalan', 'fafafafa', 'cilok', 'sak wayah wayah', '088666777999', -7.81123354, 111.99243164, 'ft1.png', 'hero.png', 'gula.jpg', '2024-11-29 03:27:33', 'true', 'cilok racing'),
+	(5, '55555adgdfafd', '', 'cahyadi', 'kono adoh', 'mojoroto', 'jomokerto', 'sepanjang jalan', 'disiniii', 'minuman', 'sak wayah wayah', '088666777999', -7.82477927, 112.01742553, 'ig-icons.png', 'hand-emoji.png', 'minyak.jpg', '2024-11-29 03:28:31', 'true', 'cilok racing');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

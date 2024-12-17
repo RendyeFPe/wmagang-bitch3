@@ -83,7 +83,10 @@
             margin-left: 10px;
         }
         .export-btn:hover {
-            background-color: #157347;
+            /* background-color: #157347; */
+            text-decoration: none;
+            color: white;
+            background-color: #146c43;
         }
         .table-container {
             overflow-x: auto;
@@ -109,9 +112,12 @@
             text-decoration: none;
             border-radius: 5px;
             font-size: 14px;
+            gap: 50px;
         }
         .edit-btn:hover {
             background-color: #005a63;
+            text-decoration: none;
+            color: white;
         }
             .table img:hover {
     transform: scale(1.2); /* Perbesar gambar saat di-hover */
@@ -156,28 +162,21 @@
             margin-bottom: 20px;
         }
             /* Responsive layout */
-            @media (max-width: 50px) {
-                th, td {
-                    font-size: 12px;
-                    padding: 8px;
-                }
-                h2 {
-                    font-size: 18px;
-                }
-            }
+            @media (max-width: 768px) {
+    .search-container, .table-container {
+        margin-left: 0;
+        width: 100%;
+    }
+    th, td {
+        font-size: 12px;
+        padding: 6px;
+    }
+    #searchInput, #searchButton {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
 
-            @media (max-width: 50px) {
-                h2 {
-                    font-size: 16px;
-                }
-                .table-container {
-                    padding: 10px;
-                }
-                th, td {
-                    font-size: 10px;
-                    padding: 5px;
-                }
-            }
         </style>
     </head>
     <body>
@@ -234,7 +233,7 @@
                         echo "<td><img src='uploads/" . (!empty($row['foto_lapak']) ? htmlspecialchars($row['foto_lapak']) : "placeholder.png") . "' alt='Foto Lapak' class='foto'></td>";
                         echo "<td>
                                 <a href='edit_pedagang.php?id=" . $row['id'] . "' class='edit-btn'>Edit</a>
-                                <a href='hapus_pedagang.php?id=" . $row['id'] . "' class='edit-btn' style='background-color: red;'>Hapus</a>
+                                <a href='hapus_pedagang.php?id=" . $row['id'] . "' class='edit-btn' style='background-color: red;'onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");'>Hapus</a>
                               </td>";
                         echo "</tr>";
                     }
