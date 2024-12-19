@@ -112,6 +112,8 @@
         }
         .edit-btn:hover {
             background-color: #005a63;
+            color: #f4f4f9;
+            text-decoration: none;
         }
             .table img:hover {
     transform: scale(1.2); /* Perbesar gambar saat di-hover */
@@ -234,7 +236,7 @@
                         echo "<td><img src='uploads/" . (!empty($row['foto_lapak']) ? htmlspecialchars($row['foto_lapak']) : "placeholder.png") . "' alt='Foto Lapak' class='foto'></td>";
                         echo "<td>
                                 <a href='edit_pedagang_survey.php?id=" . $row['id'] . "' class='edit-btn'>Edit</a>
-                                <a href='hapus_pedagang.php?id=" . $row['id'] . "' class='edit-btn' style='background-color: red;'>Hapus</a>
+                                <a href='hapus_pedagang.php?id=" . $row['id'] . "' class='edit-btn' style='background-color: red;' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");'>Hapus</a>
                               </td>";
                         echo "</tr>";
                     }
