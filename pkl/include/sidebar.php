@@ -98,9 +98,9 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'admin') {
             text-decoration: none;
         }
         .logout-btn:hover {
-        background-color: #ffa500; /* Warna latar saat di-hover */
-        color: #000000; /* Warna tetap hitam saat di-hover */
-        text-decoration: none;
+            background-color: #ffa500; /* Warna latar saat di-hover */
+            color: #000000; /* Warna tetap hitam saat di-hover */
+            text-decoration: none;
         }
         /* Menu items styling */
         .menu {

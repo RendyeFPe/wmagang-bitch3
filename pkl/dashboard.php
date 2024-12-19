@@ -2,14 +2,12 @@
 <?php include "include/sidebar.php"; ?>
 
 <div class="content">
-    <!-- <h2>Dashboard</h2> -->
-
     <?php
     // Koneksi ke database
     // include 'koneksi.php';
 
     // Query untuk mengambil data pedagang yang telah divalidasi (status_validasi == true)
-    $sql = "SELECT * FROM pedagang";
+    $sql = "SELECT * FROM pedagang ORDER BY no_registrasi ASC";
     $result = mysqli_query($conn, $sql);
 
     // Periksa apakah query berhasil
@@ -24,10 +22,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-           body {
+            body {
                 font-family: Arial, sans-serif;
                 margin: 0;
-                padding: 0px;
+                padding: 0;
                 background-color: #f4f4f9;
             }
             h2 {
@@ -47,82 +45,72 @@
                 padding: 20px;
             }
             .search-container {
-            margin-bottom: 15px;
-            text-align: left;
-            margin-left: 260px;
-            position: fixed;
-        }
-        #searchInput {
-            padding: 10px;
-            width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        #searchButton {
-            padding: 10px 20px;
-            background-color: #006d77;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        #searchButton:hover {
-            background-color: #005a63;
-        }
-        .export-btn {
-            padding: 10px 20px;
-            background-color: #198754;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            /* text-decoration: none; */
-            margin-left: 10px;
-        }
-        .export-btn:hover {
-            /* background-color: #157347; */
-            text-decoration: none;
-            color: white;
-            background-color: #146c43;
-        }
-        .table-container {
-            overflow-x: auto;
-            margin: 20px;
-            margin-left: 260px;
-            margin-top: 75px;
-            width:90%;
-            max-width: 100%; /* Maksimal lebar */
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 10px;
-        }
-        table {
-            width: 100%;
-            min-width: 1000px; /* Minimum lebar tabel */
-        }
-        .edit-btn {
-            display: inline-block;
-            padding: 8px 12px;
-            background-color: #006d77;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 14px;
-            gap: 50px;
-        }
-        .edit-btn:hover {
-            background-color: #005a63;
-            text-decoration: none;
-            color: white;
-        }
-            .table img:hover {
-    transform: scale(1.2); /* Perbesar gambar saat di-hover */
-    transition: all 0.3s ease; /* Animasi perbesaran */
-}
+                margin-bottom: 15px;
+                text-align: left;
+                margin-left: 260px;
+                position: fixed;
+            }
+            #searchInput {
+                padding: 10px;
+                width: 300px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+            #searchButton {
+                padding: 10px 20px;
+                background-color: #006d77;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+            #searchButton:hover {
+                background-color: #005a63;
+            }
+            .export-btn {
+                padding: 10px 20px;
+                background-color: #198754;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+                margin-left: 10px;
+            }
+            .export-btn:hover {
+                color: white;
+                background-color: #146c43;
+            }
+            .table-container {
+                overflow-x: auto;
+                margin: 20px;
+                margin-left: 260px;
+                margin-top: 75px;
+                width: 90%;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 10px;
+            }
+            table {
+                width: 100%;
+                min-width: 1000px;
+            }
+            .edit-btn {
+                display: inline-block;
+                padding: 8px 12px;
+                background-color: #006d77;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+            .edit-btn:hover {
+                background-color: #005a63;
+                color: white;
+            }
             table, th, td {
                 border: 1px solid #ddd;
             }
@@ -143,40 +131,32 @@
                 border-radius: 4px;
             }
             .foto {
-            max-width: 100px; /* Ukuran maksimal lebar foto */
-            height: auto; /* Pertahankan proporsi asli foto */
-            border-radius: 8px; /* Membuat sudut melengkung */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Efek bayangan untuk estetika */
-            margin: 5px; /* Jarak antar elemen */
-            object-fit: cover; /* Memastikan foto terpotong secara proporsional jika dimensinya berbeda */
-            display: block; /* Mengatur foto dalam blok untuk memastikan posisi rapi */
-        }
+                max-width: 100px;
+                height: auto;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin: 5px;
+                object-fit: cover;
+                display: block;
+            }
             .content {
-            margin-left: 20px;
-            /* margin-right: 10px; */
-            padding: 20px;
-        }
-        .content h3 {
-            color: #343a40;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-            /* Responsive layout */
+                margin-left: 20px;
+                padding: 20px;
+            }
             @media (max-width: 768px) {
-    .search-container, .table-container {
-        margin-left: 0;
-        width: 100%;
-    }
-    th, td {
-        font-size: 12px;
-        padding: 6px;
-    }
-    #searchInput, #searchButton {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-}
-
+                .search-container, .table-container {
+                    margin-left: 0;
+                    width: 100%;
+                }
+                th, td {
+                    font-size: 12px;
+                    padding: 6px;
+                }
+                #searchInput, #searchButton {
+                    width: 100%;
+                    margin-bottom: 10px;
+                }
+            }
         </style>
     </head>
     <body>
@@ -233,7 +213,7 @@
                         echo "<td><img src='uploads/" . (!empty($row['foto_lapak']) ? htmlspecialchars($row['foto_lapak']) : "placeholder.png") . "' alt='Foto Lapak' class='foto'></td>";
                         echo "<td>
                                 <a href='edit_pedagang.php?id=" . $row['id'] . "' class='edit-btn'>Edit</a>
-                                <a href='hapus_pedagang.php?id=" . $row['id'] . "' class='edit-btn' style='background-color: red;'onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");'>Hapus</a>
+                                <a href='hapus_pedagang.php?id=" . $row['id'] . "' class='edit-btn' style='background-color: red;' onclick='return confirm(\"Apakah Anda yakin ingin menghapus data ini?\");'>Hapus</a>
                               </td>";
                         echo "</tr>";
                     }
@@ -269,7 +249,7 @@
         });
     </script>
     </body>
-</html>
+    </html>
     <?php
     // Tutup koneksi
     mysqli_close($conn);

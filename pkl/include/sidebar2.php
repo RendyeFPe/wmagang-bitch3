@@ -95,6 +95,12 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'user') {
             border-radius: 5px;
             cursor: pointer;
             margin: 20px 0;
+            text-decoration: none;
+        }
+        .logout-btn:hover{
+            background-color: #ffa500; /* Warna latar saat di-hover */
+            color: #000000; /* Warna tetap hitam saat di-hover */
+            text-decoration: none;
         }
         /* Menu items styling */
         .menu {
@@ -114,6 +120,8 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'user') {
         .menu-item:hover {
             background-color: #83c5be;
             border-radius: 0 20px 20px 0;
+            text-decoration: none;
+            color: #000000;
         }
         .menu-item img {
             width: 24px;
